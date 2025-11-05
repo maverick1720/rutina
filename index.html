@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RUTINA ADRIÁN</title>
+  <style>
+    body {
+      background-image: url('ChatGPT Image 3 nov 2025, 02_47_45 p.m..png');
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      background: rgba(255,255,255,0.9);
+      padding: 10px;
+      border-radius: 10px;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      background: rgba(255,255,255,0.95);
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    td[contenteditable="true"] {
+      background-color: #fffdd0;
+    }
+    .button-group {
+      margin: 20px 0;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      width: 80%;
+    }
+    .close {
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>RUTINA ADRIÁN 🧒</h1>
+
+  <div class="button-group">
+    <button onclick="loadRoutine('SEMANAL')">Rutina Semanal 📅</button>
+    <button onclick="loadRoutine('DIARIO')">Rutina Diaria 📆</button>
+  </div>
+
+  <div id="routine-table"></div>
+
+  <div id="dayModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="modalDay">Día</h2>
+      <table id="modalTable"></table>
+    </div>
+  </div>
+
+  <script>
+    let dataSemanal = {};
+    let dataDiario = {};
+
+    async function loadRoutine(type) {
+      const file = type === 'SEMANAL' ? 'SEMANAL.json' : 'DIARIO.json';
+      const response = await fetch(file);
+      const data = await response.json();
+      if (type === 'SEMANAL') {
+        dataSemanal = data;
+      } else {
+        dataDiario = data;
+      }
+      renderTable(data);
+    }
+
+    function renderTable(data) {
+      const container = document.getElementById('routine-table');
+      let html = '<table><thead><tr><th>🕐 Hora</th>';
+      const dias = Object.keys(data);
+      for (const dia of dias) html += `<th onclick=\"showDay('${dia}')\">${dia}</th>`;
+      html += '</tr></thead><tbody>';
+      const horas = Object.keys(data[dias[0]]);
+      for (const hora of horas) {
+        html += `<tr><td>${hora}</td>`;
+        for (const dia of dias) {
+          html += `<td contenteditable="true">${data[dia][hora]}</td>`;
+        }
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    function showDay(dia) {
+      const modal = document.getElementById('dayModal');
+      const modalTitle = document.getElementById('modalDay');
+      const table = document.getElementById('modalTable');
+      const dayData = dataDiario[dia] || dataSemanal[dia];
+
+      modalTitle.textContent = dia;
+      let html = '<tr><th>Hora</th><th>Actividad</th></tr>';
+      for (const [hora, actividad] of Object.entries(dayData)) {
+        html += `<tr><td>${hora}</td><td contenteditable="true">${actividad}</td></tr>`;
+      }
+      table.innerHTML = html;
+      modal.style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('dayModal').style.display = 'none';
+    }
+
+    // Carga por defecto
+    loadRoutine('SEMANAL');
+  </script>
+</body>
+</html>
