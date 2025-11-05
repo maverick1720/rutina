@@ -94,23 +94,51 @@
       renderTable(data);
     }
 
+    // function renderTable(data) {
+    //   const container = document.getElementById('routine-table');
+    //   let html = '<table><thead><tr><th>🕐 Hora</th>';
+    //   const dias = Object.keys(data);
+    //   for (const dia of dias) html += `<th onclick=\"showDay('${dia}')\">${dia}</th>`;
+    //   html += '</tr></thead><tbody>';
+    //   const horas = Object.keys(data[dias[0]]);
+    //   for (const hora of horas) {
+    //     html += `<tr><td>${hora}</td>`;
+    //     for (const dia of dias) {
+    //       html += `<td contenteditable="true">${data[dia][hora]}</td>`;
+    //     }
+    //     html += '</tr>';
+    //   }
+    //   html += '</tbody></table>';
+    //   container.innerHTML = html;
+    // }
+
     function renderTable(data) {
-      const container = document.getElementById('routine-table');
-      let html = '<table><thead><tr><th>🕐 Hora</th>';
-      const dias = Object.keys(data);
-      for (const dia of dias) html += `<th onclick=\"showDay('${dia}')\">${dia}</th>`;
-      html += '</tr></thead><tbody>';
-      const horas = Object.keys(data[dias[0]]);
-      for (const hora of horas) {
-        html += `<tr><td>${hora}</td>`;
-        for (const dia of dias) {
-          html += `<td contenteditable="true">${data[dia][hora]}</td>`;
-        }
-        html += '</tr>';
-      }
-      html += '</tbody></table>';
-      container.innerHTML = html;
+  const container = document.getElementById('routine-table');
+  let html = '<table><thead><tr><th>📅 Día</th>';
+  
+  // Obtener los horarios desde el primer día
+  const dias = Object.keys(data);
+  const horas = Object.keys(data[dias[0]]);
+  
+  // Encabezados de las horas
+  for (const hora of horas) {
+    html += `<th>${hora}</th>`;
+  }
+  html += '</tr></thead><tbody>';
+  
+  // Filas por día
+  for (const dia of dias) {
+    html += `<tr><td onclick="showDay('${dia}')" style="font-weight:bold;">${dia}</td>`;
+    for (const hora of horas) {
+      html += `<td contenteditable="true">${data[dia][hora]}</td>`;
     }
+    html += '</tr>';
+  }
+  
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
 
     function showDay(dia) {
       const modal = document.getElementById('dayModal');
