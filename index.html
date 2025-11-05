@@ -6,7 +6,7 @@
   <title>RUTINA ADRIÁN</title>
   <style>
     body {
-      background-image: url('ChatGPT Image 3 nov 2025, 02_47_45 p.m..png');
+      background-image: url('fondo.png');
       background-size: cover;
       font-family: Arial, sans-serif;
       color: #333;
@@ -112,32 +112,76 @@
     //   container.innerHTML = html;
     // }
 
-    function renderTable(data) {
+//     function renderTable(data) {
+//   const container = document.getElementById('routine-table');
+//   let html = '<table><thead><tr><th>📅 Día</th>';
+  
+//   // Obtener los horarios desde el primer día
+//   const dias = Object.keys(data);
+//   const horas = Object.keys(data[dias[0]]);
+  
+//   // Encabezados de las horas
+//   for (const hora of horas) {
+//     html += `<th>${hora}</th>`;
+//   }
+//   html += '</tr></thead><tbody>';
+  
+//   // Filas por día
+//   for (const dia of dias) {
+//     html += `<tr><td onclick="showDay('${dia}')" style="font-weight:bold;">${dia}</td>`;
+//     for (const hora of horas) {
+//       html += `<td contenteditable="true">${data[dia][hora]}</td>`;
+//     }
+//     html += '</tr>';
+//   }
+  
+//   html += '</tbody></table>';
+//   container.innerHTML = html;
+// }
+// Datos iniciales de ejemplo
+const rutinaBase = {
+  "Lunes": { "7:00": "Desayunar 🍳", "8:00": "Dar comida a Luca 🐶", "9:00": "Clases 🎒" },
+  "Martes": { "7:00": "Desayunar 🍳", "8:00": "Arreglar ropa 👕", "9:00": "Clases 🎒" },
+  "Miércoles": { "7:00": "Desayunar 🍳", "8:00": "Tareas 📝", "9:00": "Jugar fútbol ⚽" },
+  "Jueves": { "7:00": "Desayunar 🍳", "8:00": "Clases 🎒", "9:00": "Ayudar en casa 🧹" },
+  "Viernes": { "7:00": "Desayunar 🍳", "8:00": "Clases 🎒", "9:00": "Secar platos 🍽️" },
+  "Sábado": { "8:00": "Paseo con Luca 🐾", "10:00": "Tiempo libre 🎮", "12:00": "Almuerzo familiar 🍲" },
+  "Domingo": { "9:00": "Desayuno con familia 🥞", "11:00": "Fútbol ⚽", "18:00": "Preparar mochila 🎒" }
+};
+
+// Cargar datos guardados o base
+function cargarDatos() {
+  const guardado = localStorage.getItem('rutinaAdrian');
+  return guardado ? JSON.parse(guardado) : rutinaBase;
+}
+
+// Guardar datos en localStorage
+function guardarDatos(data) {
+  localStorage.setItem('rutinaAdrian', JSON.stringify(data));
+}
+
+// Renderizar tabla principal
+function renderTable(data) {
   const container = document.getElementById('routine-table');
   let html = '<table><thead><tr><th>📅 Día</th>';
   
-  // Obtener los horarios desde el primer día
   const dias = Object.keys(data);
   const horas = Object.keys(data[dias[0]]);
   
-  // Encabezados de las horas
-  for (const hora of horas) {
-    html += `<th>${hora}</th>`;
-  }
-  html += '</tr></thead><tbody>';
+  for (const hora of horas) html += `<th>${hora}</th>`;
+  html += '<th>✅ Cumplimiento</th></tr></thead><tbody>';
   
-  // Filas por día
   for (const dia of dias) {
-    html += `<tr><td onclick="showDay('${dia}')" style="font-weight:bold;">${dia}</td>`;
+    html += `<tr><td style="font-weight:bold;">${dia}</td>`;
     for (const hora of horas) {
-      html += `<td contenteditable="true">${data[dia][hora]}</td>`;
+      html += `<td contenteditable="true" oninput="actualizarTarea('${dia}','${hora}',this.innerText)">${data[dia][hora]}</td>`;
     }
+    html += `<td class="cumplimiento"><span class="emoji" onclick="toggleEmoji(this, '${dia}')">${data[dia].emoji || '😊'}</span></td>`;
     html += '</tr>';
   }
   
   html += '</tbody></table>';
-  container.innerHTML = html;
-}
+  container.in
 
 
     function showDay(dia) {
