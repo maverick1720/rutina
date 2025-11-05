@@ -7,7 +7,7 @@
         "Viernes": "Despertar, aseo y tender la cama 😃",
         "Sábado": "Dormir un poco más 😴",
         "Domingo": "Dormir un poco más 😴",
-        "Cumplimiento": ""
+     
     },
     "6:45 a.m.": {
         "Lunes": "Desayuno 🍞",
@@ -17,7 +17,7 @@
         "Viernes": "Desayuno 🍞",
         "Sábado": "Desayuno familiar 🥐",
         "Domingo": "Desayuno familiar 🥐",
-        "Cumplimiento": ""
+     
     },
     "7:00 a.m.": {
         "Lunes": "Salida al colegio 🏫",
@@ -27,7 +27,7 @@
         "Viernes": "Salida al colegio 🏫",
         "Sábado": "Actividades familiares 🚶‍♂️",
         "Domingo": "Actividades familiares 👨‍👩‍👧‍👦",
-        "Cumplimiento": ""
+     
     },
     "8:00 a.m. – 2:00 p.m.": {
         "Lunes": "Colegio 📚",
@@ -37,7 +37,7 @@
         "Viernes": "Colegio 📚",
         "Sábado": "Paseo o deporte 🚴‍♂️",
         "Domingo": "Actividad libre 🧩",
-        "Cumplimiento": ""
+      
     },
     "2:00 p.m.": {
         "Lunes": "Almuerzo 🍽️",
@@ -47,7 +47,7 @@
         "Viernes": "Almuerzo 🍽️",
         "Sábado": "Almuerzo familiar 🍲",
         "Domingo": "Almuerzo familiar 🍲",
-        "Cumplimiento": ""
+      
     },
     "2:30 p.m.": {
         "Lunes": "Dar comida al perrito 🐶",
@@ -57,7 +57,7 @@
         "Viernes": "Dar comida al perrito 🐶",
         "Sábado": "Jugar con el perrito 🐾",
         "Domingo": "Jugar con el perrito 🐾",
-        "Cumplimiento": ""
+     
     },
     "3:00 p.m.": {
         "Lunes": "Descanso / juego 🎮",
@@ -67,7 +67,7 @@
         "Viernes": "Descanso / juego 🎮",
         "Sábado": "Tiempo libre 🌳",
         "Domingo": "Manualidades ✂️",
-        "Cumplimiento": ""
+       
     },
     "4:00 – 5:30 p.m.": {
         "Lunes": "Hacer tareas ✏️",
@@ -77,7 +77,7 @@
         "Viernes": "Hacer tareas ✏️",
         "Sábado": "Leer o dibujar 🎨",
         "Domingo": "Organizar útiles 📖",
-        "Cumplimiento": ""
+   
     },
     "5:30 p.m.": {
         "Lunes": "Merienda 🍎",
@@ -87,7 +87,7 @@
         "Viernes": "Merienda 🍎",
         "Sábado": "Merienda 🍪",
         "Domingo": "Merienda 🍪",
-        "Cumplimiento": ""
+       
     },
     "6:00 p.m.": {
         "Lunes": "Lectura libre 📚 + Arreglar ropa 👕",
@@ -97,7 +97,7 @@
         "Viernes": "Paseo con perrito 🐕",
         "Sábado": "Juegos al aire libre ⚽",
         "Domingo": "Preparar semana 🧠",
-        "Cumplimiento": ""
+   
     },
     "7:00 – 8:00 p.m.": {
         "Lunes": "Taekwondo 🥋",
@@ -107,7 +107,7 @@
         "Viernes": "Taekwondo 🥋",
         "Sábado": "Tiempo en familia 💬",
         "Domingo": "Cena en familia 🍛",
-        "Cumplimiento": ""
+      
     },
     "8:00 p.m.": {
         "Lunes": "Ducha y cena ligera 🚿",
@@ -117,7 +117,7 @@
         "Viernes": "Ducha y cena ligera 🚿",
         "Sábado": "Ducha 🚿",
         "Domingo": "Ducha 🚿",
-        "Cumplimiento": ""
+     
     },
     "8:30 p.m.": {
         "Lunes": "Lectura antes de dormir 📖",
@@ -127,7 +127,7 @@
         "Viernes": "Lectura antes de dormir 📖",
         "Sábado": "Historia familiar 🎲",
         "Domingo": "Conversar 💬",
-        "Cumplimiento": ""
+      
     },
     "9:00 p.m.": {
         "Lunes": "Preparar mochila 🎒",
@@ -137,7 +137,7 @@
         "Viernes": "Preparar mochila 🎒",
         "Sábado": "Preparar ropa 👕",
         "Domingo": "Preparar ropa 👔",
-        "Cumplimiento": ""
+       
     },
     "9:15 p.m.": {
         "Lunes": "Cepillarse los dientes 🪥",
@@ -147,7 +147,7 @@
         "Viernes": "Cepillarse los dientes 🪥",
         "Sábado": "Cepillarse los dientes 🪥",
         "Domingo": "Cepillarse los dientes 🪥",
-        "Cumplimiento": ""
+      
     },
     "9:30 p.m.": {
         "Lunes": "Dormir 💤",
@@ -157,6 +157,6 @@
         "Viernes": "Dormir 💤",
         "Sábado": "Dormir 🌙",
         "Domingo": "Dormir 🌙",
-        "Cumplimiento": ""
+        
     }
 }
