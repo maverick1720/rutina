@@ -3,20 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RUTINA ADRIÁN</title>
+  <title>Rutina de Adrián 🧒</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap">
   <style>
     body {
       background-image: url('fondo.png');
       background-size: cover;
-      font-family: Arial, sans-serif;
+      background-position: center;
+      font-family: 'Poppins', sans-serif;
       color: #333;
       text-align: center;
       padding: 20px;
     }
     h1 {
-      background: rgba(255,255,255,0.9);
+      background: rgba(255, 255, 255, 0.9);
       padding: 10px;
       border-radius: 10px;
+      display: inline-block;
     }
     table {
       width: 100%;
@@ -32,179 +35,37 @@
       background-color: #f2f2f2;
     }
     td[contenteditable="true"] {
-      background-color: #fffdd0;
+      background-color: #fff8dc;
     }
-    .button-group {
-      margin: 20px 0;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.7);
-    }
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      width: 80%;
-    }
-    .close {
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 10px;
       cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .emoji {
+      cursor: pointer;
+      font-size: 1.5em;
     }
   </style>
 </head>
 <body>
-  <h1>RUTINA 🧒</h1>
+  <h1>🌈 Rutina de Adrián 🧒</h1>
 
   <div class="button-group">
-    <button onclick="loadRoutine('SEMANAL')">Rutina Semanal 📅</button>
-    <button onclick="loadRoutine('DIARIO')">Rutina Diaria 📆</button>
+    <button onclick="loadRoutine('SEMANAL')">📅 Rutina Semanal</button>
+    <button onclick="loadRoutine('DIARIO')">📆 Rutina Diaria</button>
   </div>
 
   <div id="routine-table"></div>
 
-  <div id="dayModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <h2 id="modalDay">Día</h2>
-      <table id="modalTable"></table>
-    </div>
-  </div>
-
-  <script>
-    let dataSemanal = {};
-    let dataDiario = {};
-
-    async function loadRoutine(type) {
-      const file = type === 'SEMANAL' ? 'SEMANAL.json' : 'DIARIO.json';
-      const response = await fetch(file);
-      const data = await response.json();
-      if (type === 'SEMANAL') {
-        dataSemanal = data;
-      } else {
-        dataDiario = data;
-      }
-      renderTable(data);
-    }
-
-    // function renderTable(data) {
-    //   const container = document.getElementById('routine-table');
-    //   let html = '<table><thead><tr><th>🕐 Hora</th>';
-    //   const dias = Object.keys(data);
-    //   for (const dia of dias) html += `<th onclick=\"showDay('${dia}')\">${dia}</th>`;
-    //   html += '</tr></thead><tbody>';
-    //   const horas = Object.keys(data[dias[0]]);
-    //   for (const hora of horas) {
-    //     html += `<tr><td>${hora}</td>`;
-    //     for (const dia of dias) {
-    //       html += `<td contenteditable="true">${data[dia][hora]}</td>`;
-    //     }
-    //     html += '</tr>';
-    //   }
-    //   html += '</tbody></table>';
-    //   container.innerHTML = html;
-    // }
-
-//     function renderTable(data) {
-//   const container = document.getElementById('routine-table');
-//   let html = '<table><thead><tr><th>📅 Día</th>';
-  
-//   // Obtener los horarios desde el primer día
-//   const dias = Object.keys(data);
-//   const horas = Object.keys(data[dias[0]]);
-  
-//   // Encabezados de las horas
-//   for (const hora of horas) {
-//     html += `<th>${hora}</th>`;
-//   }
-//   html += '</tr></thead><tbody>';
-  
-//   // Filas por día
-//   for (const dia of dias) {
-//     html += `<tr><td onclick="showDay('${dia}')" style="font-weight:bold;">${dia}</td>`;
-//     for (const hora of horas) {
-//       html += `<td contenteditable="true">${data[dia][hora]}</td>`;
-//     }
-//     html += '</tr>';
-//   }
-  
-//   html += '</tbody></table>';
-//   container.innerHTML = html;
-// }
-// Datos iniciales de ejemplo
-const rutinaBase = {
-  "Lunes": { "7:00": "Desayunar 🍳", "8:00": "Dar comida a Luca 🐶", "9:00": "Clases 🎒" },
-  "Martes": { "7:00": "Desayunar 🍳", "8:00": "Arreglar ropa 👕", "9:00": "Clases 🎒" },
-  "Miércoles": { "7:00": "Desayunar 🍳", "8:00": "Tareas 📝", "9:00": "Jugar fútbol ⚽" },
-  "Jueves": { "7:00": "Desayunar 🍳", "8:00": "Clases 🎒", "9:00": "Ayudar en casa 🧹" },
-  "Viernes": { "7:00": "Desayunar 🍳", "8:00": "Clases 🎒", "9:00": "Secar platos 🍽️" },
-  "Sábado": { "8:00": "Paseo con Luca 🐾", "10:00": "Tiempo libre 🎮", "12:00": "Almuerzo familiar 🍲" },
-  "Domingo": { "9:00": "Desayuno con familia 🥞", "11:00": "Fútbol ⚽", "18:00": "Preparar mochila 🎒" }
-};
-
-// Cargar datos guardados o base
-function cargarDatos() {
-  const guardado = localStorage.getItem('rutinaAdrian');
-  return guardado ? JSON.parse(guardado) : rutinaBase;
-}
-
-// Guardar datos en localStorage
-function guardarDatos(data) {
-  localStorage.setItem('rutinaAdrian', JSON.stringify(data));
-}
-
-// Renderizar tabla principal
-function renderTable(data) {
-  const container = document.getElementById('routine-table');
-  let html = '<table><thead><tr><th>📅 Día</th>';
-  
-  const dias = Object.keys(data);
-  const horas = Object.keys(data[dias[0]]);
-  
-  for (const hora of horas) html += `<th>${hora}</th>`;
-  html += '<th>✅ Cumplimiento</th></tr></thead><tbody>';
-  
-  for (const dia of dias) {
-    html += `<tr><td style="font-weight:bold;">${dia}</td>`;
-    for (const hora of horas) {
-      html += `<td contenteditable="true" oninput="actualizarTarea('${dia}','${hora}',this.innerText)">${data[dia][hora]}</td>`;
-    }
-    html += `<td class="cumplimiento"><span class="emoji" onclick="toggleEmoji(this, '${dia}')">${data[dia].emoji || '😊'}</span></td>`;
-    html += '</tr>';
-  }
-  
-  html += '</tbody></table>';
-  container.in
-
-
-    function showDay(dia) {
-      const modal = document.getElementById('dayModal');
-      const modalTitle = document.getElementById('modalDay');
-      const table = document.getElementById('modalTable');
-      const dayData = dataDiario[dia] || dataSemanal[dia];
-
-      modalTitle.textContent = dia;
-      let html = '<tr><th>Hora</th><th>Actividad</th></tr>';
-      for (const [hora, actividad] of Object.entries(dayData)) {
-        html += `<tr><td>${hora}</td><td contenteditable="true">${actividad}</td></tr>`;
-      }
-      table.innerHTML = html;
-      modal.style.display = 'block';
-    }
-
-    function closeModal() {
-      document.getElementById('dayModal').style.display = 'none';
-    }
-
-    // Carga por defecto
-    loadRoutine('SEMANAL');
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
