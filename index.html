@@ -58,18 +58,6 @@
     td {
       font-size: 15px;
       color: #01579b;
-      position: relative;
-    }
-
-    td.day-cell {
-      background-color: #e3f2fd;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    td.day-cell:hover {
-      background-color: #bbdefb;
     }
 
     select {
@@ -103,7 +91,6 @@
       transform: scale(1.05);
     }
 
-    /* LEYENDA */
     .legend {
       display: flex;
       justify-content: center;
@@ -130,87 +117,11 @@
       margin-right: 8px;
     }
 
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background-color: #ffffff;
-      border-radius: 20px;
-      padding: 25px;
-      width: 90%;
-      max-width: 500px;
-      text-align: left;
-      position: relative;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      animation: slideDown 0.3s ease;
-    }
-
-    @keyframes slideDown {
-      from { transform: translateY(-20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .modal h2 {
-      color: #0288d1;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .modal ul {
-      list-style: none;
-      padding: 0;
-      margin: 15px 0 0 0;
-    }
-
-    .modal ul li {
-      background-color: #e1f5fe;
-      margin: 6px 0;
-      padding: 10px;
-      border-radius: 10px;
-      color: #01579b;
-      font-size: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .emoji {
-      font-size: 20px;
-    }
-
-    .legend-modal {
-      background: #f1faff;
-      border-radius: 12px;
-      padding: 10px;
-      text-align: center;
-      margin-top: 10px;
-      font-size: 14px;
-      color: #0277bd;
-    }
-
-    .legend-modal span {
-      margin: 0 6px;
-      font-size: 18px;
-    }
-
-    /* Colores por estado */
     .estado-🌟 { background-color: #c8e6c9 !important; }
     .estado-😊 { background-color: #fff9c4 !important; }
     .estado-😐 { background-color: #ffe0b2 !important; }
     .estado-😴 { background-color: #ffcdd2 !important; }
 
-    /* Barra de progreso */
     .progress-bar {
       height: 12px;
       border-radius: 8px;
@@ -234,6 +145,61 @@
       color: #01579b;
       font-weight: bold;
     }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 25px;
+      width: 90%;
+      max-width: 500px;
+      text-align: left;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal h2 {
+      color: #0288d1;
+      text-align: center;
+    }
+
+    .modal ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 15px;
+    }
+
+    .modal li {
+      background: #e1f5fe;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal select {
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
@@ -256,10 +222,7 @@
   <!-- MODAL -->
   <div id="dayModal" class="modal" onclick="closeModal(event)">
     <div class="modal-content" id="modalContent">
-      <h2 id="modalDay">Día</h2>
-      <div class="legend-modal">
-        🌟 = Excelente &nbsp;|&nbsp; 😊 = Cumplido &nbsp;|&nbsp; 😐 = Parcial &nbsp;|&nbsp; 😴 = No realizado
-      </div>
+      <h2 id="modalDay"></h2>
       <ul id="modalList"></ul>
     </div>
   </div>
@@ -277,8 +240,7 @@
         if (type === 'SEMANAL') dataSemanal = data;
         renderTable(data);
       } catch (error) {
-        console.error('Error al cargar JSON:', error);
-        document.getElementById('routine-table').innerHTML = "<p style='color:red;'>⚠️ No se pudo cargar la rutina.</p>";
+        document.getElementById('routine-table').innerHTML = "<p style='color:red;'>⚠️ Error al cargar la rutina.</p>";
       }
     }
 
@@ -287,117 +249,76 @@
       const horas = Object.keys(data);
       const dias = Object.keys(data[horas[0]]);
 
-      let html = '<table><thead><tr><th>🕒 Hora</th>';
-      for (const dia of dias) html += `<th class="day-cell" onclick="showDay('${dia}')">${dia}</th>`;
-      html += '<th>📊 % Cumplimiento</th></tr></thead><tbody>';
+      let html = `<table><thead><tr><th>🕒 Hora</th>`;
+      for (const dia of dias) html += `<th onclick="showDay('${dia}')">${dia}</th>`;
+      html += '</tr></thead><tbody>';
 
       for (const hora of horas) {
         html += `<tr><td><b>${hora}</b></td>`;
         for (const dia of dias) {
-          const tarea = data[hora][dia] || '-';
-          const estado = cumplimiento[`${dia}-${hora}`] || '😴';
+          const tarea = data[hora][dia] || "-";
+          const estado = cumplimiento[`${dia}-${hora}`] || "😴";
           const colorClass = `estado-${estado}`;
-
           html += `<td class="${colorClass}">
                     <div>${tarea}</div>
-                    <select onchange="cambiarEstado('${dia}','${hora}', this)">
+                    <select onchange="actualizarEstado('${dia}','${hora}', this)">
                       <option ${estado==='😴'?'selected':''}>😴</option>
                       <option ${estado==='😐'?'selected':''}>😐</option>
                       <option ${estado==='😊'?'selected':''}>😊</option>
                       <option ${estado==='🌟'?'selected':''}>🌟</option>
                     </select>
-                  </td>`;
+                   </td>`;
         }
-        html += `<td id="porcentaje-${hora}" class="porcentaje"></td></tr>`;
+        html += `</tr>`;
       }
 
-      // Fila resumen semanal
-      html += `<tr style="background:#e1f5fe;font-weight:bold;">
-                <td>Resumen por día</td>`;
-      for (const dia of dias) {
-        html += `<td>
-                  <div id="barra-${dia}" class="progress-bar">
-                    <div class="progress" id="progress-${dia}"></div>
-                  </div>
-                  <div id="texto-${dia}" class="dia-resumen">0% 😴</div>
-                </td>`;
-      }
-      html += `<td>—</td></tr></tbody></table>`;
-
+      html += `</tbody></table>`;
       container.innerHTML = html;
-      actualizarTodo(data);
     }
 
-    function actualizarTodo(data) {
-      calcularPorcentajesPorHora(data);
-      calcularPorcentajesPorDia(data);
-    }
-
-    function calcularPorcentajesPorHora(data) {
-      const horas = Object.keys(data);
-      const dias = Object.keys(data[horas[0]]);
-      for (const hora of horas) {
-        let completadas = 0;
-        for (const dia of dias) {
-          const estado = cumplimiento[`${dia}-${hora}`];
-          if (estado === '🌟' || estado === '😊') completadas++;
-        }
-        const porcentaje = Math.round((completadas / dias.length) * 100);
-        document.getElementById(`porcentaje-${hora}`).textContent = `${porcentaje}%`;
-      }
-    }
-
-    function calcularPorcentajesPorDia(data) {
-      const horas = Object.keys(data);
-      const dias = Object.keys(data[horas[0]]);
-      for (const dia of dias) {
-        let completadas = 0;
-        for (const hora of horas) {
-          const estado = cumplimiento[`${dia}-${hora}`];
-          if (estado === '🌟' || estado === '😊') completadas++;
-        }
-        const porcentaje = Math.round((completadas / horas.length) * 100);
-        const emojiDia = porcentaje >= 90 ? '🌟' : porcentaje >= 70 ? '😊' : porcentaje >= 40 ? '😐' : '😴';
-        document.getElementById(`progress-${dia}`).style.width = `${porcentaje}%`;
-        document.getElementById(`texto-${dia}`).textContent = `${porcentaje}% ${emojiDia}`;
-      }
-    }
-
-    function cambiarEstado(dia, hora, select) {
+    function actualizarEstado(dia, hora, select) {
       const emoji = select.value;
-      const celda = select.closest('td');
+      const celda = select.closest("td");
       celda.className = `estado-${emoji}`;
       cumplimiento[`${dia}-${hora}`] = emoji;
       localStorage.setItem("cumplimientoAdrian", JSON.stringify(cumplimiento));
-      actualizarTodo(dataSemanal);
     }
 
     function showDay(dia) {
-      const modal = document.getElementById('dayModal');
-      const modalDay = document.getElementById('modalDay');
-      const modalList = document.getElementById('modalList');
+      const modal = document.getElementById("dayModal");
+      const modalDay = document.getElementById("modalDay");
+      const modalList = document.getElementById("modalList");
       modalDay.textContent = `Rutina del ${dia}`;
-      modalList.innerHTML = '';
+      modalList.innerHTML = "";
 
-      const dayData = {};
       Object.entries(dataSemanal).forEach(([hora, actividades]) => {
-        if (actividades[dia]) dayData[hora] = actividades[dia];
+        const tarea = actividades[dia];
+        if (tarea) {
+          const estado = cumplimiento[`${dia}-${hora}`] || "😴";
+          const li = document.createElement("li");
+          li.className = `estado-${estado}`;
+          li.innerHTML = `<span>${hora}: ${tarea}</span>
+                          <select onchange="actualizarDesdeModal('${dia}','${hora}', this)">
+                            <option ${estado==='😴'?'selected':''}>😴</option>
+                            <option ${estado==='😐'?'selected':''}>😐</option>
+                            <option ${estado==='😊'?'selected':''}>😊</option>
+                            <option ${estado==='🌟'?'selected':''}>🌟</option>
+                          </select>`;
+          modalList.appendChild(li);
+        }
       });
-
-      Object.entries(dayData).forEach(([hora, tarea]) => {
-        const estado = cumplimiento[`${dia}-${hora}`] || '😴';
-        const li = document.createElement('li');
-        li.classList.add(`estado-${estado}`);
-        li.innerHTML = `<span>${hora}: ${tarea}</span> <span class="emoji">${estado}</span>`;
-        modalList.appendChild(li);
-      });
-
       modal.style.display = "flex";
     }
 
+    function actualizarDesdeModal(dia, hora, select) {
+      actualizarEstado(dia, hora, select);
+      renderTable(dataSemanal); // Sincroniza cambios globalmente
+      showDay(dia); // Refresca modal
+    }
+
     function closeModal(event) {
-      const modal = document.getElementById('dayModal');
-      const modalContent = document.getElementById('modalContent');
+      const modal = document.getElementById("dayModal");
+      const modalContent = document.getElementById("modalContent");
       if (!modalContent.contains(event.target)) modal.style.display = "none";
     }
 
