@@ -12,59 +12,80 @@
       color: #004d66;
       padding: 20px;
     }
+
     h1 {
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.9);
       padding: 12px;
       border-radius: 15px;
       display: inline-block;
       box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+      font-size: 28px;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 25px;
-      background-color: rgba(255, 255, 255, 0.95);
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
       overflow: hidden;
+      box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
     }
+
     th, td {
       border: 1px solid #90caf9;
       padding: 10px;
+      text-align: center;
     }
+
     th {
-      background-color: #81d4fa;
+      background-color: #4fc3f7;
+      color: #ffffff;
+      font-size: 16px;
+    }
+
+    td {
+      font-size: 15px;
       color: #01579b;
     }
-    td[contenteditable="true"] {
-      background-color: #fff8e1;
-    }
+
     td.day-cell {
-      font-weight: bold;
-      color: #0277bd;
-      cursor: pointer;
       background-color: #e3f2fd;
-      transition: background 0.3s;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
+
     td.day-cell:hover {
       background-color: #bbdefb;
     }
+
+    td[contenteditable="true"] {
+      background-color: #fff8e1;
+    }
+
     .button-group {
       margin: 20px 0;
     }
+
     .button-group button {
       background-color: #4fc3f7;
       color: white;
       border: none;
       padding: 10px 15px;
       margin: 5px;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       font-size: 16px;
+      transition: all 0.2s;
     }
+
     .button-group button:hover {
       background-color: #29b6f6;
+      transform: scale(1.05);
     }
-    /* Modal */
+
+    /* MODAL */
     .modal {
       display: none;
       position: fixed;
@@ -73,49 +94,48 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0, 0, 0, 0.5);
       justify-content: center;
       align-items: center;
     }
+
     .modal-content {
-      background: #ffffff;
-      border-radius: 15px;
+      background-color: #ffffff;
+      border-radius: 20px;
       padding: 25px;
       width: 90%;
-      max-width: 600px;
+      max-width: 500px;
       text-align: left;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
       position: relative;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       animation: slideDown 0.3s ease;
     }
+
     @keyframes slideDown {
-      from { transform: translateY(-30px); opacity: 0; }
+      from { transform: translateY(-20px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
-    .close {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 26px;
-      cursor: pointer;
+
+    .modal h2 {
       color: #0288d1;
-    }
-    .modal-content h2 {
-      color: #01579b;
       text-align: center;
     }
-    ul {
+
+    .modal ul {
       list-style: none;
       padding: 0;
-      margin-top: 15px;
+      margin: 15px 0 0 0;
     }
-    ul li {
+
+    .modal ul li {
       background-color: #e1f5fe;
-      margin: 5px 0;
+      margin: 6px 0;
       padding: 10px;
       border-radius: 10px;
+      color: #01579b;
       font-size: 16px;
     }
+
   </style>
 </head>
 <body>
@@ -128,10 +148,9 @@
 
   <div id="routine-table"></div>
 
-  <!-- Modal -->
-  <div id="dayModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
+  <!-- MODAL -->
+  <div id="dayModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" id="modalContent">
       <h2 id="modalDay">Día</h2>
       <ul id="modalList"></ul>
     </div>
@@ -141,6 +160,7 @@
     let dataSemanal = {};
     let dataDiario = {};
 
+    // Cargar JSON
     async function loadRoutine(type) {
       const file = type === 'SEMANAL' ? 'SEMANAL.json' : 'DIARIO.json';
       try {
@@ -156,34 +176,23 @@
       }
     }
 
+    // Renderizar tabla (días en filas, horas en columnas)
     function renderTable(data, type) {
       const container = document.getElementById('routine-table');
       let html = '<table><thead><tr><th>📅 Día</th>';
 
-      // Obtener horarios
-      const dias = Object.keys(type === 'SEMANAL' ? data[Object.keys(data)[0]] : data);
-      const horas = type === 'SEMANAL'
-        ? Object.keys(data)
-        : Object.keys(data[dias[0]]);
+      const horas = Object.keys(data);
+      const dias = Object.keys(data[horas[0]]);
 
+      // columnas = horas
       for (const hora of horas) html += `<th>${hora}</th>`;
       html += '</tr></thead><tbody>';
 
-      // Render por día
-      if (type === 'SEMANAL') {
-        const diasSemana = Object.keys(data[horas[0]]);
-        for (const dia of diasSemana) {
-          html += `<tr><td class="day-cell" onclick="showDay('${dia}')">${dia}</td>`;
-          for (const hora of horas) {
-            html += `<td>${data[hora][dia]}</td>`;
-          }
-          html += '</tr>';
-        }
-      } else {
-        const hoy = data["Hoy"];
-        html += `<tr><td class="day-cell" onclick="showDay('Hoy')">Hoy</td>`;
-        for (const hora of Object.keys(hoy)) {
-          html += `<td>${hoy[hora]}</td>`;
+      // filas = días
+      for (const dia of dias) {
+        html += `<tr><td class="day-cell" onclick="showDay('${dia}')">${dia}</td>`;
+        for (const hora of horas) {
+          html += `<td>${data[hora][dia]}</td>`;
         }
         html += '</tr>';
       }
@@ -192,7 +201,7 @@
       container.innerHTML = html;
     }
 
-    // Modal con la rutina del día
+    // Modal
     function showDay(dia) {
       const modal = document.getElementById('dayModal');
       const modalDay = document.getElementById('modalDay');
@@ -203,14 +212,11 @@
       let dayData = {};
 
       if (dataSemanal && Object.keys(dataSemanal).length > 0) {
-        // buscar en semanal
         Object.entries(dataSemanal).forEach(([hora, actividades]) => {
           if (actividades[dia]) {
             dayData[hora] = actividades[dia];
           }
         });
-      } else if (dataDiario["Hoy"]) {
-        dayData = dataDiario["Hoy"];
       }
 
       for (const [hora, actividad] of Object.entries(dayData)) {
@@ -222,11 +228,15 @@
       modal.style.display = "flex";
     }
 
-    function closeModal() {
-      document.getElementById('dayModal').style.display = "none";
+    function closeModal(event) {
+      const modal = document.getElementById('dayModal');
+      const modalContent = document.getElementById('modalContent');
+      if (!modalContent.contains(event.target)) {
+        modal.style.display = "none";
+      }
     }
 
-    // Cargar por defecto la rutina semanal
+    // Cargar rutina semanal por defecto
     loadRoutine('SEMANAL');
   </script>
 </body>
