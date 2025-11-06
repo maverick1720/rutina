@@ -240,10 +240,16 @@
 <body>
   <h1>Mi Rutina Semanal 💙 Adrián Sosa</h1>
 
-  <div class="button-group">
+  <!-- <div class="button-group">
     <button onclick="loadRoutine()">🔄 Cargar Rutina</button>
     <button class="btn-reiniciar" id="btnReiniciar" onclick="animarReinicio()">🧹 Reiniciar Rutina</button>
-  </div>
+  </div> -->
+  <div class="button-group">
+  <button onclick="loadRoutine()">🔄 Cargar Rutina</button>
+  <button class="btn-reiniciar" id="btnReiniciar" onclick="animarReinicio()">🧹 Reiniciar Rutina</button>
+  <button onclick="abrirPanelPadres()">👨‍👩‍👧 PADRES</button>
+</div>
+
 
   <div class="legend">
     <div class="legend-item"><span>🌟</span> Excelente</div>
@@ -422,6 +428,10 @@ window.addEventListener('scroll', () => {
     }
   }
 });
+// 👨‍👩‍👧 Abre el Panel de Padres en una nueva pestaña
+function abrirPanelPadres() {
+  window.open('padres.html', '_blank');
+}
 
   </script>
 </body>
