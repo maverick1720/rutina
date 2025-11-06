@@ -7,27 +7,21 @@
   <style>
     body {
       font-family: "Comic Sans MS", "Poppins", sans-serif;
-      text-align: center;
       color: #004d66;
+      text-align: center;
       padding: 20px;
-      background-color: #b3e5fc;
-      background-image: 
-        url('https://cdn-icons-png.flaticon.com/512/941/941623.png'),   /* ⚽ Pelota */
-        url('https://cdn-icons-png.flaticon.com/512/3566/3566988.png'); /* 🧩 Lego */
-      background-size: 90px, 80px;
-      background-repeat: repeat;
-      background-position: top left, bottom right;
-      background-attachment: fixed;
+      background: url("ChatGPT Image 2 nov 2025, 03_22_47 p.m..png") no-repeat center center fixed;
+      background-size: cover;
     }
 
     h1 {
       background: rgba(255, 255, 255, 0.9);
-      padding: 12px;
+      padding: 10px 20px;
       border-radius: 15px;
       display: inline-block;
-      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
-      font-size: 28px;
       color: #01579b;
+      font-size: 28px;
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     table {
@@ -50,7 +44,7 @@
 
     th {
       background-color: #4fc3f7;
-      color: #ffffff;
+      color: white;
       font-size: 16px;
     }
 
@@ -58,114 +52,89 @@
       background-color: #e3f2fd;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
 
     td.day-cell:hover {
       background-color: #bbdefb;
     }
 
-    td[contenteditable="true"] {
-      background-color: #fff8e1;
-    }
-
-    .button-group {
-      margin: 20px 0;
-    }
-
-    .button-group button {
-      background-color: #4fc3f7;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      margin: 5px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.2s;
-    }
-
-    .button-group button:hover {
-      background-color: #29b6f6;
-      transform: scale(1.05);
+    td.task {
+      text-align: left;
+      padding-left: 15px;
+      position: relative;
     }
 
     .emoji {
       cursor: pointer;
       font-size: 18px;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
       transition: transform 0.2s;
     }
 
     .emoji:hover {
-      transform: scale(1.3);
+      transform: scale(1.3) translateY(-50%);
     }
 
-    /* MODAL */
     .modal {
       display: none;
       position: fixed;
       z-index: 10;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
       justify-content: center;
       align-items: center;
     }
 
     .modal-content {
-      background-color: #ffffff;
+      background: #fff;
       border-radius: 20px;
       padding: 25px;
       width: 90%;
       max-width: 500px;
       text-align: left;
-      position: relative;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      animation: slideDown 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      animation: showUp 0.3s ease;
     }
 
-    @keyframes slideDown {
-      from { transform: translateY(-20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    @keyframes showUp {
+      from {transform: scale(0.9); opacity: 0;}
+      to {transform: scale(1); opacity: 1;}
     }
 
     .modal h2 {
-      color: #0288d1;
       text-align: center;
+      color: #0288d1;
+      margin-top: 0;
     }
 
     .modal ul {
       list-style: none;
       padding: 0;
-      margin: 15px 0 0 0;
     }
 
-    .modal ul li {
+    .modal li {
       background-color: #e1f5fe;
       margin: 6px 0;
       padding: 10px;
       border-radius: 10px;
-      color: #01579b;
-      font-size: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      color: #01579b;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
   <h1>Mi Rutina Semanal 💙 Adrián Sosa</h1>
 
-  <div class="button-group">
-    <button onclick="loadRoutine('SEMANAL')">Rutina Semanal 📅</button>
-    <button onclick="loadRoutine('DIARIO')">Rutina Diaria 📆</button>
-  </div>
-
   <div id="routine-table"></div>
 
-  <!-- MODAL -->
+  <!-- Modal -->
   <div id="dayModal" class="modal" onclick="closeModal(event)">
     <div class="modal-content" id="modalContent">
       <h2 id="modalDay">Día</h2>
@@ -174,44 +143,43 @@
   </div>
 
   <script>
-    let dataSemanal = {};
+    const data = {
+      "Lunes": { "7:00": "Desayunar 🍳", "8:00": "Dar comida a Luca 🐶", "9:00": "Clases 🎒" },
+      "Martes": { "7:00": "Desayunar 🍳", "8:00": "Arreglar ropa 👕", "9:00": "Clases 🎒" },
+      "Miércoles": { "7:00": "Desayunar 🍳", "8:00": "Tareas 📝", "9:00": "Jugar fútbol ⚽" },
+      "Jueves": { "7:00": "Desayunar 🍳", "8:00": "Clases 🎒", "9:00": "Ayudar en casa 🧹" },
+      "Viernes": { "7:00": "Desayunar 🍳", "8:00": "Clases 🎒", "9:00": "Secar platos 🍽️" },
+      "Sábado": { "8:00": "Paseo con Luca 🐾", "10:00": "Tiempo libre 🎮", "12:00": "Almuerzo familiar 🍲" },
+      "Domingo": { "9:00": "Desayuno con familia 🥞", "11:00": "Fútbol ⚽", "18:00": "Preparar mochila 🎒" }
+    };
+
     let cumplimiento = JSON.parse(localStorage.getItem("cumplimientoAdrian")) || {};
 
-    async function loadRoutine(type) {
-      const file = type === 'SEMANAL' ? 'SEMANAL.json' : 'DIARIO.json';
-      try {
-        const response = await fetch(file);
-        if (!response.ok) throw new Error('Archivo no encontrado');
-        const data = await response.json();
-        if (type === 'SEMANAL') dataSemanal = data;
-        renderTable(data);
-      } catch (error) {
-        document.getElementById('routine-table').innerHTML = "<p style='color:red;'>⚠️ No se pudo cargar la rutina.</p>";
-      }
-    }
-
-    function renderTable(data) {
-      const container = document.getElementById('routine-table');
+    function renderTable() {
+      const container = document.getElementById("routine-table");
+      const horas = Object.keys(data["Lunes"]);
       let html = '<table><thead><tr><th>📅 Día</th>';
-
-      const horas = Object.keys(data);
-      const dias = Object.keys(data[horas[0]]);
 
       for (const hora of horas) html += `<th>${hora}</th>`;
       html += '<th>📊 % Cumplimiento</th></tr></thead><tbody>';
 
-      for (const dia of dias) {
+      for (const dia in data) {
         html += `<tr><td class="day-cell" onclick="showDay('${dia}')">${dia}</td>`;
         let completadas = 0;
+        const total = Object.keys(data[dia]).length;
 
-        for (const hora of horas) {
+        for (const hora in data[dia]) {
           const key = `${dia}-${hora}`;
           const estado = cumplimiento[key] || '😴';
           if (estado !== '😴') completadas++;
-          html += `<td onclick="toggleTaskEmoji('${dia}','${hora}',this)" class="emoji">${estado}</td>`;
+          html += `
+            <td class="task">
+              ${data[dia][hora]}
+              <span class="emoji" onclick="toggleEmoji('${key}', this)">${estado}</span>
+            </td>`;
         }
 
-        const porcentaje = Math.round((completadas / horas.length) * 100);
+        const porcentaje = Math.round((completadas / total) * 100);
         html += `<td>${porcentaje}% ✅</td></tr>`;
       }
 
@@ -219,49 +187,42 @@
       container.innerHTML = html;
     }
 
-    function toggleTaskEmoji(dia, hora, el) {
+    function toggleEmoji(key, el) {
       const estados = ['😴', '😐', '😊', '🌟'];
       const actual = estados.indexOf(el.textContent);
       const siguiente = (actual + 1) % estados.length;
       el.textContent = estados[siguiente];
-      cumplimiento[`${dia}-${hora}`] = estados[siguiente];
+      cumplimiento[key] = estados[siguiente];
       localStorage.setItem("cumplimientoAdrian", JSON.stringify(cumplimiento));
-      renderTable(dataSemanal);
+      renderTable();
     }
 
     function showDay(dia) {
-      const modal = document.getElementById('dayModal');
-      const modalDay = document.getElementById('modalDay');
-      const modalList = document.getElementById('modalList');
+      const modal = document.getElementById("dayModal");
+      const modalDay = document.getElementById("modalDay");
+      const modalList = document.getElementById("modalList");
+
       modalDay.textContent = `Rutina del ${dia}`;
       modalList.innerHTML = '';
 
-      const dayData = {};
-      Object.entries(dataSemanal).forEach(([hora, actividades]) => {
-        if (actividades[dia]) {
-          dayData[hora] = actividades[dia];
-        }
-      });
-
-      Object.entries(dayData).forEach(([hora, tarea]) => {
-        const li = document.createElement('li');
-        const estado = cumplimiento[`${dia}-${hora}`] || '😴';
-        li.innerHTML = `<span>${hora}: ${tarea}</span> <span class="emoji" onclick="toggleTaskEmoji('${dia}','${hora}', this)">${estado}</span>`;
+      for (const hora in data[dia]) {
+        const key = `${dia}-${hora}`;
+        const estado = cumplimiento[key] || '😴';
+        const li = document.createElement("li");
+        li.innerHTML = `${hora}: ${data[dia][hora]} <span class="emoji" onclick="toggleEmoji('${key}', this)">${estado}</span>`;
         modalList.appendChild(li);
-      });
+      }
 
       modal.style.display = "flex";
     }
 
     function closeModal(event) {
-      const modal = document.getElementById('dayModal');
-      const modalContent = document.getElementById('modalContent');
-      if (!modalContent.contains(event.target)) {
-        modal.style.display = "none";
-      }
+      const modal = document.getElementById("dayModal");
+      const modalContent = document.getElementById("modalContent");
+      if (!modalContent.contains(event.target)) modal.style.display = "none";
     }
 
-    loadRoutine('SEMANAL');
+    renderTable();
   </script>
 </body>
 </html>
