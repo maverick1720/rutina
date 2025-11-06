@@ -1,162 +1,146 @@
 {
-    "6:20 a.m.": {
-        "Lunes": "Despertar, aseo y tender la cama 😃",
-        "Martes": "Despertar, aseo y tender la cama 😃",
-        "Miércoles": "Despertar, aseo y tender la cama 😃",
-        "Jueves": "Despertar, aseo y tender la cama 😃",
-        "Viernes": "Despertar, aseo y tender la cama 😃",
-        "Sábado": "Dormir un poco más 😴",
-        "Domingo": "Dormir un poco más 😴",
-     
-    },
-    "6:45 a.m.": {
-        "Lunes": "Desayuno 🍞",
-        "Martes": "Desayuno 🍞",
-        "Miércoles": "Desayuno 🍞",
-        "Jueves": "Desayuno 🍞",
-        "Viernes": "Desayuno 🍞",
-        "Sábado": "Desayuno familiar 🥐",
-        "Domingo": "Desayuno familiar 🥐",
-     
-    },
-    "7:00 a.m.": {
-        "Lunes": "Salida al colegio 🏫",
-        "Martes": "Salida al colegio 🏫",
-        "Miércoles": "Salida al colegio 🏫",
-        "Jueves": "Salida al colegio 🏫",
-        "Viernes": "Salida al colegio 🏫",
-        "Sábado": "Actividades familiares 🚶‍♂️",
-        "Domingo": "Actividades familiares 👨‍👩‍👧‍👦",
-     
-    },
-    "8:00 a.m. – 2:00 p.m.": {
-        "Lunes": "Colegio 📚",
-        "Martes": "Colegio 📚",
-        "Miércoles": "Colegio 📚",
-        "Jueves": "Colegio 📚",
-        "Viernes": "Colegio 📚",
-        "Sábado": "Paseo o deporte 🚴‍♂️",
-        "Domingo": "Actividad libre 🧩",
-      
-    },
-    "2:00 p.m.": {
-        "Lunes": "Almuerzo 🍽️",
-        "Martes": "Almuerzo 🍽️",
-        "Miércoles": "Almuerzo 🍽️",
-        "Jueves": "Almuerzo 🍽️",
-        "Viernes": "Almuerzo 🍽️",
-        "Sábado": "Almuerzo familiar 🍲",
-        "Domingo": "Almuerzo familiar 🍲",
-      
-    },
-    "2:30 p.m.": {
-        "Lunes": "Dar comida al perrito 🐶",
-        "Martes": "Dar comida al perrito 🐶",
-        "Miércoles": "Dar comida al perrito 🐶",
-        "Jueves": "Dar comida al perrito 🐶",
-        "Viernes": "Dar comida al perrito 🐶",
-        "Sábado": "Jugar con el perrito 🐾",
-        "Domingo": "Jugar con el perrito 🐾",
-     
-    },
-    "3:00 p.m.": {
-        "Lunes": "Descanso / juego 🎮",
-        "Martes": "Descanso / juego 🎮",
-        "Miércoles": "Descanso / juego 🎮",
-        "Jueves": "Descanso / juego 🎮",
-        "Viernes": "Descanso / juego 🎮",
-        "Sábado": "Tiempo libre 🌳",
-        "Domingo": "Manualidades ✂️",
-       
-    },
-    "4:00 – 5:30 p.m.": {
-        "Lunes": "Hacer tareas ✏️",
-        "Martes": "Hacer tareas ✏️",
-        "Miércoles": "Hacer tareas ✏️",
-        "Jueves": "Hacer tareas ✏️",
-        "Viernes": "Hacer tareas ✏️",
-        "Sábado": "Leer o dibujar 🎨",
-        "Domingo": "Organizar útiles 📖",
-   
-    },
-    "5:30 p.m.": {
-        "Lunes": "Merienda 🍎",
-        "Martes": "Merienda 🍎",
-        "Miércoles": "Merienda 🍎",
-        "Jueves": "Merienda 🍎",
-        "Viernes": "Merienda 🍎",
-        "Sábado": "Merienda 🍪",
-        "Domingo": "Merienda 🍪",
-       
-    },
-    "6:00 p.m.": {
-        "Lunes": "Lectura libre 📚 + Arreglar ropa 👕",
-        "Martes": "Origami ✂️ + Revisar ropa 👚",
-        "Miércoles": "Lectura guiada 📖",
-        "Jueves": "Cine familiar 🎬 + Secar platos 🍽️",
-        "Viernes": "Paseo con perrito 🐕",
-        "Sábado": "Juegos al aire libre ⚽",
-        "Domingo": "Preparar semana 🧠",
-   
-    },
-    "7:00 – 8:00 p.m.": {
-        "Lunes": "Taekwondo 🥋",
-        "Martes": "Actividad libre 🎲",
-        "Miércoles": "Taekwondo 🥋",
-        "Jueves": "Actividad libre 🎲",
-        "Viernes": "Taekwondo 🥋",
-        "Sábado": "Tiempo en familia 💬",
-        "Domingo": "Cena en familia 🍛",
-      
-    },
-    "8:00 p.m.": {
-        "Lunes": "Ducha y cena ligera 🚿",
-        "Martes": "Ducha y cena ligera 🚿",
-        "Miércoles": "Ducha y cena ligera 🚿",
-        "Jueves": "Ducha y cena ligera 🚿",
-        "Viernes": "Ducha y cena ligera 🚿",
-        "Sábado": "Ducha 🚿",
-        "Domingo": "Ducha 🚿",
-     
-    },
-    "8:30 p.m.": {
-        "Lunes": "Lectura antes de dormir 📖",
-        "Martes": "Lectura antes de dormir 📖",
-        "Miércoles": "Lectura antes de dormir 📖",
-        "Jueves": "Lectura antes de dormir 📖",
-        "Viernes": "Lectura antes de dormir 📖",
-        "Sábado": "Historia familiar 🎲",
-        "Domingo": "Conversar 💬",
-      
-    },
-    "9:00 p.m.": {
-        "Lunes": "Preparar mochila 🎒",
-        "Martes": "Preparar mochila 🎒",
-        "Miércoles": "Preparar mochila 🎒",
-        "Jueves": "Preparar mochila 🎒",
-        "Viernes": "Preparar mochila 🎒",
-        "Sábado": "Preparar ropa 👕",
-        "Domingo": "Preparar ropa 👔",
-       
-    },
-    "9:15 p.m.": {
-        "Lunes": "Cepillarse los dientes 🪥",
-        "Martes": "Cepillarse los dientes 🪥",
-        "Miércoles": "Cepillarse los dientes 🪥",
-        "Jueves": "Cepillarse los dientes 🪥",
-        "Viernes": "Cepillarse los dientes 🪥",
-        "Sábado": "Cepillarse los dientes 🪥",
-        "Domingo": "Cepillarse los dientes 🪥",
-      
-    },
-    "9:30 p.m.": {
-        "Lunes": "Dormir 💤",
-        "Martes": "Dormir 💤",
-        "Miércoles": "Dormir 💤",
-        "Jueves": "Dormir 💤",
-        "Viernes": "Dormir 💤",
-        "Sábado": "Dormir 🌙",
-        "Domingo": "Dormir 🌙",
-        
-    }
+  "6:20 a.m.": {
+    "Lunes": "Despertar, aseo y tender la cama 😃",
+    "Martes": "Despertar, aseo y tender la cama 😃",
+    "Miércoles": "Despertar, aseo y tender la cama 😃",
+    "Jueves": "Despertar, aseo y tender la cama 😃",
+    "Viernes": "Despertar, aseo y tender la cama 😃",
+    "Sábado": "Dormir un poco más 😴",
+    "Domingo": "Dormir un poco más 😴"
+  },
+  "6:45 a.m.": {
+    "Lunes": "Desayuno 🍞",
+    "Martes": "Desayuno 🍞",
+    "Miércoles": "Desayuno 🍞",
+    "Jueves": "Desayuno 🍞",
+    "Viernes": "Desayuno 🍞",
+    "Sábado": "Desayuno familiar 🥐",
+    "Domingo": "Desayuno familiar 🥐"
+  },
+  "7:00 a.m.": {
+    "Lunes": "Salida al colegio 🏫",
+    "Martes": "Salida al colegio 🏫",
+    "Miércoles": "Salida al colegio 🏫",
+    "Jueves": "Salida al colegio 🏫",
+    "Viernes": "Salida al colegio 🏫",
+    "Sábado": "Actividades familiares 🚶‍♂️",
+    "Domingo": "Actividades familiares 👨‍👩‍👧‍👦"
+  },
+  "8:00 a.m. – 2:00 p.m.": {
+    "Lunes": "Colegio 📚",
+    "Martes": "Colegio 📚",
+    "Miércoles": "Colegio 📚",
+    "Jueves": "Colegio 📚",
+    "Viernes": "Colegio 📚",
+    "Sábado": "Paseo o deporte 🚴‍♂️",
+    "Domingo": "Actividad libre 🧩"
+  },
+  "2:00 p.m.": {
+    "Lunes": "Almuerzo 🍽️",
+    "Martes": "Almuerzo 🍽️",
+    "Miércoles": "Almuerzo 🍽️",
+    "Jueves": "Almuerzo 🍽️",
+    "Viernes": "Almuerzo 🍽️",
+    "Sábado": "Almuerzo familiar 🍲",
+    "Domingo": "Almuerzo familiar 🍲"
+  },
+  "2:30 p.m.": {
+    "Lunes": "Dar comida al perrito 🐶",
+    "Martes": "Dar comida al perrito 🐶",
+    "Miércoles": "Dar comida al perrito 🐶",
+    "Jueves": "Dar comida al perrito 🐶",
+    "Viernes": "Dar comida al perrito 🐶",
+    "Sábado": "Jugar con el perrito 🐾",
+    "Domingo": "Jugar con el perrito 🐾"
+  },
+  "3:00 p.m.": {
+    "Lunes": "Descanso / juego 🎮",
+    "Martes": "Descanso / juego 🎮",
+    "Miércoles": "Descanso / juego 🎮",
+    "Jueves": "Descanso / juego 🎮",
+    "Viernes": "Descanso / juego 🎮",
+    "Sábado": "Tiempo libre 🌳",
+    "Domingo": "Manualidades ✂️"
+  },
+  "4:00 – 5:30 p.m.": {
+    "Lunes": "Hacer tareas ✏️",
+    "Martes": "Hacer tareas ✏️",
+    "Miércoles": "Hacer tareas ✏️",
+    "Jueves": "Hacer tareas ✏️",
+    "Viernes": "Hacer tareas ✏️",
+    "Sábado": "Leer o dibujar 🎨",
+    "Domingo": "Organizar útiles 📖"
+  },
+  "5:30 p.m.": {
+    "Lunes": "Merienda 🍎",
+    "Martes": "Merienda 🍎",
+    "Miércoles": "Merienda 🍎",
+    "Jueves": "Merienda 🍎",
+    "Viernes": "Merienda 🍎",
+    "Sábado": "Merienda 🍪",
+    "Domingo": "Merienda 🍪"
+  },
+  "6:00 p.m.": {
+    "Lunes": "Lectura libre 📚 + Arreglar ropa 👕",
+    "Martes": "Origami ✂️ + Revisar ropa 👚",
+    "Miércoles": "Lectura guiada 📖",
+    "Jueves": "Cine familiar 🎬 + Secar platos 🍽️",
+    "Viernes": "Paseo con perrito 🐕",
+    "Sábado": "Juegos al aire libre ⚽",
+    "Domingo": "Preparar semana 🧠"
+  },
+  "7:00 – 8:00 p.m.": {
+    "Lunes": "Taekwondo 🥋",
+    "Martes": "Actividad libre 🎲",
+    "Miércoles": "Taekwondo 🥋",
+    "Jueves": "Actividad libre 🎲",
+    "Viernes": "Taekwondo 🥋",
+    "Sábado": "Tiempo en familia 💬",
+    "Domingo": "Cena en familia 🍛"
+  },
+  "8:00 p.m.": {
+    "Lunes": "Ducha y cena ligera 🚿",
+    "Martes": "Ducha y cena ligera 🚿",
+    "Miércoles": "Ducha y cena ligera 🚿",
+    "Jueves": "Ducha y cena ligera 🚿",
+    "Viernes": "Ducha y cena ligera 🚿",
+    "Sábado": "Ducha 🚿",
+    "Domingo": "Ducha 🚿"
+  },
+  "8:30 p.m.": {
+    "Lunes": "Lectura antes de dormir 📖",
+    "Martes": "Lectura antes de dormir 📖",
+    "Miércoles": "Lectura antes de dormir 📖",
+    "Jueves": "Lectura antes de dormir 📖",
+    "Viernes": "Lectura antes de dormir 📖",
+    "Sábado": "Historia familiar 🎲",
+    "Domingo": "Conversar 💬"
+  },
+  "9:00 p.m.": {
+    "Lunes": "Preparar mochila 🎒",
+    "Martes": "Preparar mochila 🎒",
+    "Miércoles": "Preparar mochila 🎒",
+    "Jueves": "Preparar mochila 🎒",
+    "Viernes": "Preparar mochila 🎒",
+    "Sábado": "Preparar ropa 👕",
+    "Domingo": "Preparar ropa 👔"
+  },
+  "9:15 p.m.": {
+    "Lunes": "Cepillarse los dientes 🪥",
+    "Martes": "Cepillarse los dientes 🪥",
+    "Miércoles": "Cepillarse los dientes 🪥",
+    "Jueves": "Cepillarse los dientes 🪥",
+    "Viernes": "Cepillarse los dientes 🪥",
+    "Sábado": "Cepillarse los dientes 🪥",
+    "Domingo": "Cepillarse los dientes 🪥"
+  },
+  "9:30 p.m.": {
+    "Lunes": "Dormir 💤",
+    "Martes": "Dormir 💤",
+    "Miércoles": "Dormir 💤",
+    "Jueves": "Dormir 💤",
+    "Viernes": "Dormir 💤",
+    "Sábado": "Dormir 🌙",
+    "Domingo": "Dormir 🌙"
+  }
 }
