@@ -141,6 +141,52 @@
       transition: fill 0.5s ease;
     }
 
+    /* 📊 Gráfico de barras comparativo */
+    .bar-chart {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      height: 220px;
+      margin: 30px auto 10px;
+      max-width: 700px;
+      background: linear-gradient(to top, #e3f2fd, #fff);
+      border-radius: 15px;
+      padding: 15px 0;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .bar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 60px;
+    }
+
+    .bar-outer {
+      width: 40px;
+      height: 160px;
+      background-color: #f1f8e9;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .bar-inner {
+      width: 100%;
+      border-radius: 8px 8px 0 0;
+      height: 0%;
+      transition: height 1s ease, background-color 0.5s ease;
+    }
+
+    .bar-label {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #1565c0;
+    }
+
     .toast {
       position: fixed;
       bottom: 20px;
@@ -181,6 +227,9 @@
       </svg>
     </div>
 
+    <!-- 📊 Gráfico de barras comparativo -->
+    <div id="barChart" class="bar-chart"></div>
+
     <table id="tablaProgreso">
       <thead>
         <tr>
@@ -208,6 +257,7 @@
         document.getElementById("totalBox").textContent = "Promedio general: 0%";
         document.getElementById("mensajeMotivacion").textContent = "🌱 Aún no hay progreso registrado.";
         actualizarGrafico(0);
+        renderBarChart([]);
         return;
       }
 
@@ -222,6 +272,7 @@
       tbody.innerHTML = "";
       let totalGeneral = 0;
       let totalDias = 0;
+      const dataBarras = [];
 
       Object.entries(dias).forEach(([dia, estados]) => {
         let puntos = estados.map(e => e === "🌟" ? 3 : e === "😊" ? 2 : e === "😐" ? 1 : 0);
@@ -230,6 +281,7 @@
         totalDias++;
 
         const emojiDia = promedio >= 90 ? "🌟" : promedio >= 70 ? "😊" : promedio >= 40 ? "😐" : "😴";
+        const color = colorPorcentaje(promedio);
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -237,38 +289,36 @@
           <td class="emoji">${emojiDia}</td>
           <td><b>${promedio}%</b></td>
           <td>
-            <div class="progress"><div class="bar" style="width:${promedio}%; background-color:${colorPorcentaje(promedio)};"></div></div>
+            <div class="progress"><div class="bar" style="width:${promedio}%; background-color:${color};"></div></div>
           </td>
         `;
         tbody.appendChild(tr);
+
+        dataBarras.push({ dia, promedio, color });
       });
 
       const promedioTotal = Math.round(totalGeneral / totalDias);
       document.getElementById("totalBox").textContent = `Promedio general: ${promedioTotal}%`;
 
-      // 🟢 Actualizar gráfico circular con color dinámico
       actualizarGrafico(promedioTotal);
+      renderBarChart(dataBarras);
 
-      // Mensaje motivacional dinámico
       let mensaje = "💪 Sigamos mejorando cada día.";
       if (promedioTotal >= 90) mensaje = "🌟 ¡Excelente trabajo en familia, Adrián está superando las metas!";
       else if (promedioTotal >= 70) mensaje = "😊 Muy bien, la constancia está dando resultados.";
       else if (promedioTotal >= 40) mensaje = "😐 Aún hay espacio para mejorar, ¡ánimo!";
       else mensaje = "😴 Tiempo de retomar la rutina con energía.";
-
       document.getElementById("mensajeMotivacion").textContent = mensaje;
       mostrarToast("Progreso actualizado correctamente ✅");
     }
 
-    // 🎨 Cambia color según desempeño
     function colorPorcentaje(p) {
-      if (p >= 90) return "#43a047"; // verde
-      if (p >= 70) return "#42a5f5"; // azul
-      if (p >= 40) return "#fdd835"; // amarillo
-      return "#ef5350"; // rojo
+      if (p >= 90) return "#43a047";
+      if (p >= 70) return "#42a5f5";
+      if (p >= 40) return "#fdd835";
+      return "#ef5350";
     }
 
-    // 🔵 Actualiza el gráfico circular animado con color
     function actualizarGrafico(porcentaje) {
       const circle = document.querySelector('.chart-bar');
       const text = document.getElementById('chartText');
@@ -276,11 +326,31 @@
       const circunferencia = 2 * Math.PI * radius;
       const offset = circunferencia - (porcentaje / 100) * circunferencia;
       const color = colorPorcentaje(porcentaje);
-
       circle.style.stroke = color;
       circle.style.strokeDashoffset = offset;
       text.textContent = `${porcentaje}%`;
       text.style.fill = color;
+    }
+
+    // 📊 Renderizar gráfico de barras comparativo
+    function renderBarChart(data) {
+      const container = document.getElementById('barChart');
+      container.innerHTML = '';
+      if (!data.length) {
+        container.innerHTML = '<p style="color:#999;">Sin datos para mostrar...</p>';
+        return;
+      }
+      data.forEach(({ dia, promedio, color }) => {
+        const div = document.createElement('div');
+        div.className = 'bar-item';
+        div.innerHTML = `
+          <div class="bar-outer">
+            <div class="bar-inner" style="background-color:${color}; height:${promedio}%;"></div>
+          </div>
+          <div class="bar-label">${dia}</div>
+        `;
+        container.appendChild(div);
+      });
     }
 
     function mostrarToast(mensaje) {
