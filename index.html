@@ -112,7 +112,48 @@
       margin-right: 8px;
     }
 
-    /* MODAL */
+    /* Botones */
+    .button-group {
+      margin: 20px 0;
+    }
+
+    .button-group button {
+      background-color: #4fc3f7;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      margin: 5px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.2s;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .button-group button:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-reiniciar {
+      background-color: #ef5350 !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-reiniciar.animate {
+      animation: reiniciarSpin 1s ease-in-out;
+      background-color: #d32f2f !important;
+    }
+
+    @keyframes reiniciarSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(15deg) scale(1.1); background-color: #f48fb1; }
+      50% { transform: rotate(-15deg) scale(1.05); background-color: #f06292; }
+      75% { transform: rotate(10deg) scale(1.1); background-color: #e91e63; }
+      100% { transform: rotate(0deg) scale(1); background-color: #ef5350; }
+    }
+
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -166,18 +207,43 @@
       align-items: center;
     }
 
-    .modal select {
-      font-size: 16px;
-    }
-
     .porcentaje {
       font-weight: bold;
       color: #0277bd;
+    }
+
+    /* Notificación flotante */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #43a047;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeToast 3s ease forwards;
+      z-index: 2000;
+    }
+
+    @keyframes fadeToast {
+      0% { opacity: 0; transform: translateY(20px); }
+      15% { opacity: 1; transform: translateY(0); }
+      85% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(20px); }
     }
   </style>
 </head>
 <body>
   <h1>Mi Rutina Semanal 💙 Adrián Sosa</h1>
+
+  <div class="button-group">
+    <button onclick="loadRoutine()">🔄 Cargar Rutina</button>
+    <button class="btn-reiniciar" id="btnReiniciar" onclick="animarReinicio()">🧹 Reiniciar Rutina</button>
+  </div>
 
   <div class="legend">
     <div class="legend-item"><span>🌟</span> Excelente</div>
@@ -249,8 +315,6 @@
 
     function actualizarEstado(dia, hora, select) {
       const emoji = select.value;
-      const celda = select.closest("td");
-      celda.className = `estado-${emoji}`;
       cumplimiento[`${dia}-${hora}`] = emoji;
       localStorage.setItem("cumplimientoAdrian", JSON.stringify(cumplimiento));
       renderTable(dataSemanal);
@@ -287,7 +351,34 @@
       cumplimiento[`${dia}-${hora}`] = emoji;
       localStorage.setItem("cumplimientoAdrian", JSON.stringify(cumplimiento));
       renderTable(dataSemanal);
-      showDay(dia); // refresca modal
+      showDay(dia);
+    }
+
+    function reiniciarRutina() {
+      cumplimiento = {};
+      localStorage.removeItem("cumplimientoAdrian");
+      renderTable(dataSemanal);
+      document.getElementById("dayModal").style.display = "none";
+      mostrarToast("Rutina reiniciada con éxito 🎉");
+    }
+
+    function animarReinicio() {
+      const btn = document.getElementById("btnReiniciar");
+      if (confirm("¿Seguro que quieres reiniciar toda la rutina? 😴")) {
+        btn.classList.add("animate");
+        setTimeout(() => {
+          reiniciarRutina();
+          btn.classList.remove("animate");
+        }, 1000);
+      }
+    }
+
+    function mostrarToast(mensaje) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = mensaje;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
     }
 
     function closeModal(event) {
@@ -297,6 +388,41 @@
     }
 
     loadRoutine();
+
+    // 🔄 Sincroniza el scroll de la página con el scroll interno del modal (arriba y abajo)
+let lastScroll = 0;
+
+window.addEventListener('scroll', () => {
+  const modal = document.getElementById("dayModal");
+  const modalContent = document.getElementById("modalContent");
+
+  if (modal.style.display === "flex") {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight;
+    const winHeight = window.innerHeight;
+
+    // Detectar dirección del scroll
+    const scrollingDown = scrollTop > lastScroll;
+    lastScroll = scrollTop;
+
+    // Si baja hasta el final
+    if (scrollingDown && scrollTop + winHeight >= docHeight - 5) {
+      modalContent.scrollTo({
+        top: modalContent.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+
+    // Si sube al inicio
+    if (!scrollingDown && scrollTop <= 5) {
+      modalContent.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }
+});
+
   </script>
 </body>
 </html>
