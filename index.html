@@ -60,6 +60,17 @@
       color: #01579b;
     }
 
+    td.day-cell {
+      font-weight: bold;
+      background-color: #e3f2fd;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    td.day-cell:hover {
+      background-color: #bbdefb;
+    }
+
     select {
       margin-top: 6px;
       padding: 3px;
@@ -70,26 +81,10 @@
       color: #01579b;
     }
 
-    .button-group {
-      margin: 20px 0;
-    }
-
-    .button-group button {
-      background-color: #4fc3f7;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      margin: 5px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.2s;
-    }
-
-    .button-group button:hover {
-      background-color: #29b6f6;
-      transform: scale(1.05);
-    }
+    .estado-🌟 { background-color: #c8e6c9 !important; }
+    .estado-😊 { background-color: #fff9c4 !important; }
+    .estado-😐 { background-color: #ffe0b2 !important; }
+    .estado-😴 { background-color: #ffcdd2 !important; }
 
     .legend {
       display: flex;
@@ -115,35 +110,6 @@
     .legend-item span {
       font-size: 22px;
       margin-right: 8px;
-    }
-
-    .estado-🌟 { background-color: #c8e6c9 !important; }
-    .estado-😊 { background-color: #fff9c4 !important; }
-    .estado-😐 { background-color: #ffe0b2 !important; }
-    .estado-😴 { background-color: #ffcdd2 !important; }
-
-    .progress-bar {
-      height: 12px;
-      border-radius: 8px;
-      background: #e0f7fa;
-      overflow: hidden;
-      width: 90%;
-      margin: auto;
-    }
-
-    .progress {
-      height: 100%;
-      background: linear-gradient(90deg, #4fc3f7, #0288d1);
-      width: 0%;
-      border-radius: 8px;
-      transition: width 0.8s ease;
-    }
-
-    .dia-resumen {
-      font-size: 13px;
-      margin-top: 4px;
-      color: #01579b;
-      font-weight: bold;
     }
 
     /* Modal */
@@ -200,15 +166,11 @@
     .modal select {
       font-size: 16px;
     }
+
   </style>
 </head>
 <body>
   <h1>Mi Rutina Semanal 💙 Adrián Sosa</h1>
-
-  <div class="button-group">
-    <button onclick="loadRoutine('SEMANAL')">Rutina Semanal 📅</button>
-    <button onclick="loadRoutine('DIARIO')">Rutina Diaria 📆</button>
-  </div>
 
   <div class="legend">
     <div class="legend-item"><span>🌟</span> Excelente</div>
@@ -231,35 +193,34 @@
     let dataSemanal = {};
     let cumplimiento = JSON.parse(localStorage.getItem("cumplimientoAdrian")) || {};
 
-    async function loadRoutine(type) {
-      const file = type === 'SEMANAL' ? 'SEMANAL.json' : 'DIARIO.json';
+    async function loadRoutine() {
       try {
-        const response = await fetch(file);
-        if (!response.ok) throw new Error('Archivo no encontrado');
+        const response = await fetch("SEMANAL.json");
+        if (!response.ok) throw new Error("Archivo no encontrado");
         const data = await response.json();
-        if (type === 'SEMANAL') dataSemanal = data;
+        dataSemanal = data;
         renderTable(data);
-      } catch (error) {
-        document.getElementById('routine-table').innerHTML = "<p style='color:red;'>⚠️ Error al cargar la rutina.</p>";
+      } catch {
+        document.getElementById("routine-table").innerHTML = "<p style='color:red;'>⚠️ No se pudo cargar la rutina.</p>";
       }
     }
 
     function renderTable(data) {
-      const container = document.getElementById('routine-table');
+      const container = document.getElementById("routine-table");
       const horas = Object.keys(data);
       const dias = Object.keys(data[horas[0]]);
 
-      let html = `<table><thead><tr><th>🕒 Hora</th>`;
-      for (const dia of dias) html += `<th onclick="showDay('${dia}')">${dia}</th>`;
-      html += '</tr></thead><tbody>';
+      let html = "<table><thead><tr><th>📅 Día</th>";
+      for (const hora of horas) html += `<th>${hora}</th>`;
+      html += "</tr></thead><tbody>";
 
-      for (const hora of horas) {
-        html += `<tr><td><b>${hora}</b></td>`;
-        for (const dia of dias) {
+      for (const dia of dias) {
+        html += `<tr><td class='day-cell' onclick="showDay('${dia}')">${dia}</td>`;
+        for (const hora of horas) {
           const tarea = data[hora][dia] || "-";
           const estado = cumplimiento[`${dia}-${hora}`] || "😴";
-          const colorClass = `estado-${estado}`;
-          html += `<td class="${colorClass}">
+          const color = `estado-${estado}`;
+          html += `<td class="${color}">
                     <div>${tarea}</div>
                     <select onchange="actualizarEstado('${dia}','${hora}', this)">
                       <option ${estado==='😴'?'selected':''}>😴</option>
@@ -269,10 +230,9 @@
                     </select>
                    </td>`;
         }
-        html += `</tr>`;
+        html += "</tr>";
       }
-
-      html += `</tbody></table>`;
+      html += "</tbody></table>";
       container.innerHTML = html;
     }
 
@@ -312,8 +272,8 @@
 
     function actualizarDesdeModal(dia, hora, select) {
       actualizarEstado(dia, hora, select);
-      renderTable(dataSemanal); // Sincroniza cambios globalmente
-      showDay(dia); // Refresca modal
+      renderTable(dataSemanal); // Refresca toda la tabla
+      showDay(dia); // Refresca modal con cambios
     }
 
     function closeModal(event) {
@@ -322,7 +282,7 @@
       if (!modalContent.contains(event.target)) modal.style.display = "none";
     }
 
-    loadRoutine('SEMANAL');
+    loadRoutine();
   </script>
 </body>
 </html>
