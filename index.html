@@ -6,9 +6,8 @@
   <title>Mi Rutina Semanal 💙 Adrián Sosa</title>
   <style>
     body {
-      /* Fondo con imagen + degradado suave */
       background: 
-        linear-gradient(to bottom, rgba(179, 229, 252, 0.8), rgba(225, 245, 254, 0.8)),
+        linear-gradient(to bottom, rgba(179, 229, 252, 0.85), rgba(225, 245, 254, 0.85)),
         url('fondo.jpg') no-repeat center center fixed;
       background-size: cover;
       font-family: "Comic Sans MS", "Poppins", sans-serif;
@@ -47,6 +46,7 @@
       border: 1px solid #90caf9;
       padding: 10px;
       text-align: center;
+      vertical-align: middle;
     }
 
     th {
@@ -58,6 +58,7 @@
     td {
       font-size: 15px;
       color: #01579b;
+      position: relative;
     }
 
     td.day-cell {
@@ -69,6 +70,16 @@
 
     td.day-cell:hover {
       background-color: #bbdefb;
+    }
+
+    select {
+      margin-top: 6px;
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid #90caf9;
+      background: #f0f8ff;
+      font-size: 14px;
+      color: #01579b;
     }
 
     .button-group {
@@ -175,16 +186,9 @@
     }
 
     .emoji {
-      cursor: pointer;
       font-size: 20px;
-      transition: transform 0.2s;
     }
 
-    .emoji:hover {
-      transform: scale(1.3);
-    }
-
-    /* Leyenda interna del modal */
     .legend-modal {
       background: #f1faff;
       border-radius: 12px;
@@ -199,6 +203,37 @@
       margin: 0 6px;
       font-size: 18px;
     }
+
+    /* Colores por estado */
+    .estado-🌟 { background-color: #c8e6c9 !important; }
+    .estado-😊 { background-color: #fff9c4 !important; }
+    .estado-😐 { background-color: #ffe0b2 !important; }
+    .estado-😴 { background-color: #ffcdd2 !important; }
+
+    /* Barra de progreso */
+    .progress-bar {
+      height: 12px;
+      border-radius: 8px;
+      background: #e0f7fa;
+      overflow: hidden;
+      width: 90%;
+      margin: auto;
+    }
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg, #4fc3f7, #0288d1);
+      width: 0%;
+      border-radius: 8px;
+      transition: width 0.8s ease;
+    }
+
+    .dia-resumen {
+      font-size: 13px;
+      margin-top: 4px;
+      color: #01579b;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -209,11 +244,10 @@
     <button onclick="loadRoutine('DIARIO')">Rutina Diaria 📆</button>
   </div>
 
-  <!-- 🌟 LEYENDA DE EMOJIS (superior) -->
   <div class="legend">
-    <div class="legend-item"><span>🌟</span> Completado con excelencia</div>
+    <div class="legend-item"><span>🌟</span> Excelente</div>
     <div class="legend-item"><span>😊</span> Cumplido</div>
-    <div class="legend-item"><span>😐</span> Parcialmente cumplido</div>
+    <div class="legend-item"><span>😐</span> Parcial</div>
     <div class="legend-item"><span>😴</span> No realizado</div>
   </div>
 
@@ -255,19 +289,87 @@
 
       let html = '<table><thead><tr><th>🕒 Hora</th>';
       for (const dia of dias) html += `<th class="day-cell" onclick="showDay('${dia}')">${dia}</th>`;
-      html += '</tr></thead><tbody>';
+      html += '<th>📊 % Cumplimiento</th></tr></thead><tbody>';
 
       for (const hora of horas) {
         html += `<tr><td><b>${hora}</b></td>`;
         for (const dia of dias) {
           const tarea = data[hora][dia] || '-';
-          html += `<td>${tarea}</td>`;
+          const estado = cumplimiento[`${dia}-${hora}`] || '😴';
+          const colorClass = `estado-${estado}`;
+
+          html += `<td class="${colorClass}">
+                    <div>${tarea}</div>
+                    <select onchange="cambiarEstado('${dia}','${hora}', this)">
+                      <option ${estado==='😴'?'selected':''}>😴</option>
+                      <option ${estado==='😐'?'selected':''}>😐</option>
+                      <option ${estado==='😊'?'selected':''}>😊</option>
+                      <option ${estado==='🌟'?'selected':''}>🌟</option>
+                    </select>
+                  </td>`;
         }
-        html += '</tr>';
+        html += `<td id="porcentaje-${hora}" class="porcentaje"></td></tr>`;
       }
 
-      html += '</tbody></table>';
+      // Fila resumen semanal
+      html += `<tr style="background:#e1f5fe;font-weight:bold;">
+                <td>Resumen por día</td>`;
+      for (const dia of dias) {
+        html += `<td>
+                  <div id="barra-${dia}" class="progress-bar">
+                    <div class="progress" id="progress-${dia}"></div>
+                  </div>
+                  <div id="texto-${dia}" class="dia-resumen">0% 😴</div>
+                </td>`;
+      }
+      html += `<td>—</td></tr></tbody></table>`;
+
       container.innerHTML = html;
+      actualizarTodo(data);
+    }
+
+    function actualizarTodo(data) {
+      calcularPorcentajesPorHora(data);
+      calcularPorcentajesPorDia(data);
+    }
+
+    function calcularPorcentajesPorHora(data) {
+      const horas = Object.keys(data);
+      const dias = Object.keys(data[horas[0]]);
+      for (const hora of horas) {
+        let completadas = 0;
+        for (const dia of dias) {
+          const estado = cumplimiento[`${dia}-${hora}`];
+          if (estado === '🌟' || estado === '😊') completadas++;
+        }
+        const porcentaje = Math.round((completadas / dias.length) * 100);
+        document.getElementById(`porcentaje-${hora}`).textContent = `${porcentaje}%`;
+      }
+    }
+
+    function calcularPorcentajesPorDia(data) {
+      const horas = Object.keys(data);
+      const dias = Object.keys(data[horas[0]]);
+      for (const dia of dias) {
+        let completadas = 0;
+        for (const hora of horas) {
+          const estado = cumplimiento[`${dia}-${hora}`];
+          if (estado === '🌟' || estado === '😊') completadas++;
+        }
+        const porcentaje = Math.round((completadas / horas.length) * 100);
+        const emojiDia = porcentaje >= 90 ? '🌟' : porcentaje >= 70 ? '😊' : porcentaje >= 40 ? '😐' : '😴';
+        document.getElementById(`progress-${dia}`).style.width = `${porcentaje}%`;
+        document.getElementById(`texto-${dia}`).textContent = `${porcentaje}% ${emojiDia}`;
+      }
+    }
+
+    function cambiarEstado(dia, hora, select) {
+      const emoji = select.value;
+      const celda = select.closest('td');
+      celda.className = `estado-${emoji}`;
+      cumplimiento[`${dia}-${hora}`] = emoji;
+      localStorage.setItem("cumplimientoAdrian", JSON.stringify(cumplimiento));
+      actualizarTodo(dataSemanal);
     }
 
     function showDay(dia) {
@@ -283,22 +385,14 @@
       });
 
       Object.entries(dayData).forEach(([hora, tarea]) => {
-        const li = document.createElement('li');
         const estado = cumplimiento[`${dia}-${hora}`] || '😴';
-        li.innerHTML = `<span>${hora}: ${tarea}</span> <span class="emoji" onclick="toggleTaskEmoji('${dia}','${hora}', this)">${estado}</span>`;
+        const li = document.createElement('li');
+        li.classList.add(`estado-${estado}`);
+        li.innerHTML = `<span>${hora}: ${tarea}</span> <span class="emoji">${estado}</span>`;
         modalList.appendChild(li);
       });
 
       modal.style.display = "flex";
-    }
-
-    function toggleTaskEmoji(dia, hora, el) {
-      const estados = ['😴', '😐', '😊', '🌟'];
-      const actual = estados.indexOf(el.textContent);
-      const siguiente = (actual + 1) % estados.length;
-      el.textContent = estados[siguiente];
-      cumplimiento[`${dia}-${hora}`] = estados[siguiente];
-      localStorage.setItem("cumplimientoAdrian", JSON.stringify(cumplimiento));
     }
 
     function closeModal(event) {
