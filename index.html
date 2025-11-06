@@ -6,11 +6,16 @@
   <title>Mi Rutina Semanal 💙 Adrián Sosa</title>
   <style>
     body {
-      background: linear-gradient(to bottom, #b3e5fc, #e1f5fe);
+      /* Fondo con imagen + degradado suave */
+      background: 
+        linear-gradient(to bottom, rgba(179, 229, 252, 0.8), rgba(225, 245, 254, 0.8)),
+        url('fondo.jpg') no-repeat center center fixed;
+      background-size: cover;
       font-family: "Comic Sans MS", "Poppins", sans-serif;
       text-align: center;
       color: #004d66;
       padding: 20px;
+      min-height: 100vh;
     }
 
     h1 {
@@ -25,11 +30,17 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 25px;
+      margin-top: 10px;
       background: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
     }
 
     th, td {
@@ -41,7 +52,7 @@
     th {
       background-color: #4fc3f7;
       color: #ffffff;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     td {
@@ -58,10 +69,6 @@
 
     td.day-cell:hover {
       background-color: #bbdefb;
-    }
-
-    td[contenteditable="true"] {
-      background-color: #fff8e1;
     }
 
     .button-group {
@@ -83,6 +90,33 @@
     .button-group button:hover {
       background-color: #29b6f6;
       transform: scale(1.05);
+    }
+
+    /* LEYENDA */
+    .legend {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 10px 15px;
+      margin: 15px auto;
+      max-width: 600px;
+      box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin: 5px 15px;
+      font-size: 16px;
+      color: #01579b;
+    }
+
+    .legend-item span {
+      font-size: 22px;
+      margin-right: 8px;
     }
 
     /* MODAL */
@@ -119,6 +153,7 @@
     .modal h2 {
       color: #0288d1;
       text-align: center;
+      margin-bottom: 10px;
     }
 
     .modal ul {
@@ -149,6 +184,21 @@
       transform: scale(1.3);
     }
 
+    /* Leyenda interna del modal */
+    .legend-modal {
+      background: #f1faff;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #0277bd;
+    }
+
+    .legend-modal span {
+      margin: 0 6px;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
@@ -159,12 +209,23 @@
     <button onclick="loadRoutine('DIARIO')">Rutina Diaria 📆</button>
   </div>
 
+  <!-- 🌟 LEYENDA DE EMOJIS (superior) -->
+  <div class="legend">
+    <div class="legend-item"><span>🌟</span> Completado con excelencia</div>
+    <div class="legend-item"><span>😊</span> Cumplido</div>
+    <div class="legend-item"><span>😐</span> Parcialmente cumplido</div>
+    <div class="legend-item"><span>😴</span> No realizado</div>
+  </div>
+
   <div id="routine-table"></div>
 
   <!-- MODAL -->
   <div id="dayModal" class="modal" onclick="closeModal(event)">
     <div class="modal-content" id="modalContent">
       <h2 id="modalDay">Día</h2>
+      <div class="legend-modal">
+        🌟 = Excelente &nbsp;|&nbsp; 😊 = Cumplido &nbsp;|&nbsp; 😐 = Parcial &nbsp;|&nbsp; 😴 = No realizado
+      </div>
       <ul id="modalList"></ul>
     </div>
   </div>
@@ -173,7 +234,6 @@
     let dataSemanal = {};
     let cumplimiento = JSON.parse(localStorage.getItem("cumplimientoAdrian")) || {};
 
-    // Cargar JSON
     async function loadRoutine(type) {
       const file = type === 'SEMANAL' ? 'SEMANAL.json' : 'DIARIO.json';
       try {
@@ -188,43 +248,28 @@
       }
     }
 
-    // Renderizar tabla con columna de cumplimiento
     function renderTable(data) {
       const container = document.getElementById('routine-table');
-      let html = '<table><thead><tr><th>📅 Día</th>';
-
       const horas = Object.keys(data);
       const dias = Object.keys(data[horas[0]]);
 
-      // columnas = horas + cumplimiento
-      for (const hora of horas) html += `<th>${hora}</th>`;
-      html += '<th>✅ Cumplimiento</th></tr></thead><tbody>';
+      let html = '<table><thead><tr><th>🕒 Hora</th>';
+      for (const dia of dias) html += `<th class="day-cell" onclick="showDay('${dia}')">${dia}</th>`;
+      html += '</tr></thead><tbody>';
 
-      for (const dia of dias) {
-        html += `<tr><td class="day-cell" onclick="showDay('${dia}')">${dia}</td>`;
-        for (const hora of horas) {
-          html += `<td>${data[hora][dia]}</td>`;
+      for (const hora of horas) {
+        html += `<tr><td><b>${hora}</b></td>`;
+        for (const dia of dias) {
+          const tarea = data[hora][dia] || '-';
+          html += `<td>${tarea}</td>`;
         }
-
-        const emoji = cumplimiento[dia] || '😐';
-        html += `<td><span class="emoji" onclick="toggleEmoji('${dia}', this)">${emoji}</span></td></tr>`;
+        html += '</tr>';
       }
 
       html += '</tbody></table>';
       container.innerHTML = html;
     }
 
-    // Cambiar emoji de cumplimiento general del día
-    function toggleEmoji(dia, el) {
-      const estados = ['😐', '😊', '🌟', '😴'];
-      const actual = estados.indexOf(el.textContent);
-      const siguiente = (actual + 1) % estados.length;
-      el.textContent = estados[siguiente];
-      cumplimiento[dia] = estados[siguiente];
-      localStorage.setItem("cumplimientoAdrian", JSON.stringify(cumplimiento));
-    }
-
-    // Mostrar modal con tareas del día y su estado
     function showDay(dia) {
       const modal = document.getElementById('dayModal');
       const modalDay = document.getElementById('modalDay');
@@ -234,9 +279,7 @@
 
       const dayData = {};
       Object.entries(dataSemanal).forEach(([hora, actividades]) => {
-        if (actividades[dia]) {
-          dayData[hora] = actividades[dia];
-        }
+        if (actividades[dia]) dayData[hora] = actividades[dia];
       });
 
       Object.entries(dayData).forEach(([hora, tarea]) => {
@@ -249,7 +292,6 @@
       modal.style.display = "flex";
     }
 
-    // Cambiar emoji de cada tarea en el modal
     function toggleTaskEmoji(dia, hora, el) {
       const estados = ['😴', '😐', '😊', '🌟'];
       const actual = estados.indexOf(el.textContent);
@@ -262,12 +304,9 @@
     function closeModal(event) {
       const modal = document.getElementById('dayModal');
       const modalContent = document.getElementById('modalContent');
-      if (!modalContent.contains(event.target)) {
-        modal.style.display = "none";
-      }
+      if (!modalContent.contains(event.target)) modal.style.display = "none";
     }
 
-    // Cargar rutina semanal al iniciar
     loadRoutine('SEMANAL');
   </script>
 </body>
