@@ -67,9 +67,10 @@
       background-color: #bbdefb;
     }
 
-    td[contenteditable="true"] {
+/*    td[contenteditable="true"] {
       background-color: #fff8e1;
     }
+
 
     .button-group {
       margin: 20px 0;
@@ -90,6 +91,27 @@
     .button-group button:hover {
       background-color: #29b6f6;
       transform: scale(1.05);
+    }*/
+
+
+td.task {
+      text-align: left;
+      padding-left: 15px;
+      position: relative;
+    }
+
+    .emoji {
+      cursor: pointer;
+      font-size: 18px;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: transform 0.2s;
+    }
+
+    .emoji:hover {
+      transform: scale(1.3) translateY(-50%);
     }
 
     /* MODAL */
