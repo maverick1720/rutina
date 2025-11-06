@@ -6,16 +6,37 @@
   <title>Mi Rutina Semanal 💙 Adrián Sosa</title>
   <style>
     body {
-      background:
+      /*background:
         linear-gradient(to bottom, rgba(179, 229, 252, 0.85), rgba(225, 245, 254, 0.85)),
         url('fondo.jpg') no-repeat center center fixed;
       background-image:fondo.png;
-      background-size: cover;
+      background-size: cover;*/
       font-family: "Comic Sans MS", "Poppins", sans-serif;
       text-align: center;
       color: #004d66;
       padding: 20px;
       min-height: 100vh;
+
+           margin: 0;
+      padding: 0;
+      /* Fondo aplicado */
+      background-image: url('fondo.png');
+      background-repeat: no-repeat;
+      background-size: cover;         /* ajusta el fondo a toda la pantalla */
+      background-position: center;    /* centra la imagen */
+      background-attachment: fixed;   /* fondo fijo al hacer scroll */
+      font-family: "Poppins", sans-serif;
+
+    }
+
+    /* Capa semitransparente para mejorar la lectura */
+    .contenido {
+      background-color: rgba(255, 255, 255, 0.85);
+      margin: 30px auto;
+      padding: 20px 40px;
+      border-radius: 20px;
+      max-width: 1000px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     h1 {
