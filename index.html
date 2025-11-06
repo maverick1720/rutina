@@ -10,7 +10,7 @@
       color: #004d66;
       text-align: center;
       padding: 20px;
-      background: url("ChatGPT Image 2 nov 2025, 03_22_47 p.m..png") no-repeat center center fixed;
+      background: url("fondo.png") no-repeat center center fixed;
       background-size: cover;
     }
 
@@ -78,6 +78,7 @@
       transform: scale(1.3) translateY(-50%);
     }
 
+    /* MODAL */
     .modal {
       display: none;
       position: fixed;
@@ -131,10 +132,9 @@
 </head>
 <body>
   <h1>Mi Rutina Semanal 💙 Adrián Sosa</h1>
-
   <div id="routine-table"></div>
 
-  <!-- Modal -->
+  <!-- MODAL -->
   <div id="dayModal" class="modal" onclick="closeModal(event)">
     <div class="modal-content" id="modalContent">
       <h2 id="modalDay">Día</h2>
@@ -143,38 +143,42 @@
   </div>
 
   <script>
-    const data = {
-      "Lunes": { "7:00": "Desayunar 🍳", "8:00": "Dar comida a Luca 🐶", "9:00": "Clases 🎒" },
-      "Martes": { "7:00": "Desayunar 🍳", "8:00": "Arreglar ropa 👕", "9:00": "Clases 🎒" },
-      "Miércoles": { "7:00": "Desayunar 🍳", "8:00": "Tareas 📝", "9:00": "Jugar fútbol ⚽" },
-      "Jueves": { "7:00": "Desayunar 🍳", "8:00": "Clases 🎒", "9:00": "Ayudar en casa 🧹" },
-      "Viernes": { "7:00": "Desayunar 🍳", "8:00": "Clases 🎒", "9:00": "Secar platos 🍽️" },
-      "Sábado": { "8:00": "Paseo con Luca 🐾", "10:00": "Tiempo libre 🎮", "12:00": "Almuerzo familiar 🍲" },
-      "Domingo": { "9:00": "Desayuno con familia 🥞", "11:00": "Fútbol ⚽", "18:00": "Preparar mochila 🎒" }
-    };
-
+    let rutina = {};
     let cumplimiento = JSON.parse(localStorage.getItem("cumplimientoAdrian")) || {};
 
+    // 🔹 Cargar desde SEMANAL.json
+    async function loadRoutine() {
+      try {
+        const response = await fetch("SEMANAL.json");
+        if (!response.ok) throw new Error("No se pudo cargar el archivo JSON");
+        rutina = await response.json();
+        renderTable();
+      } catch (error) {
+        document.getElementById("routine-table").innerHTML = "<p style='color:red;'>⚠️ Error al cargar SEMANAL.json</p>";
+      }
+    }
+
+    // 🔹 Renderizar tabla principal
     function renderTable() {
       const container = document.getElementById("routine-table");
-      const horas = Object.keys(data["Lunes"]);
       let html = '<table><thead><tr><th>📅 Día</th>';
 
+      const horas = Object.keys(rutina["Lunes"]);
       for (const hora of horas) html += `<th>${hora}</th>`;
       html += '<th>📊 % Cumplimiento</th></tr></thead><tbody>';
 
-      for (const dia in data) {
+      for (const dia in rutina) {
         html += `<tr><td class="day-cell" onclick="showDay('${dia}')">${dia}</td>`;
         let completadas = 0;
-        const total = Object.keys(data[dia]).length;
+        const total = Object.keys(rutina[dia]).length;
 
-        for (const hora in data[dia]) {
+        for (const hora in rutina[dia]) {
           const key = `${dia}-${hora}`;
           const estado = cumplimiento[key] || '😴';
           if (estado !== '😴') completadas++;
           html += `
             <td class="task">
-              ${data[dia][hora]}
+              ${rutina[dia][hora]}
               <span class="emoji" onclick="toggleEmoji('${key}', this)">${estado}</span>
             </td>`;
         }
@@ -187,6 +191,7 @@
       container.innerHTML = html;
     }
 
+    // 🔹 Cambiar emoji y guardar
     function toggleEmoji(key, el) {
       const estados = ['😴', '😐', '😊', '🌟'];
       const actual = estados.indexOf(el.textContent);
@@ -197,6 +202,7 @@
       renderTable();
     }
 
+    // 🔹 Mostrar modal del día
     function showDay(dia) {
       const modal = document.getElementById("dayModal");
       const modalDay = document.getElementById("modalDay");
@@ -205,24 +211,27 @@
       modalDay.textContent = `Rutina del ${dia}`;
       modalList.innerHTML = '';
 
-      for (const hora in data[dia]) {
+      for (const hora in rutina[dia]) {
         const key = `${dia}-${hora}`;
         const estado = cumplimiento[key] || '😴';
         const li = document.createElement("li");
-        li.innerHTML = `${hora}: ${data[dia][hora]} <span class="emoji" onclick="toggleEmoji('${key}', this)">${estado}</span>`;
+        li.innerHTML = `
+          <span>${hora}: ${rutina[dia][hora]}</span>
+          <span class="emoji" onclick="toggleEmoji('${key}', this)">${estado}</span>`;
         modalList.appendChild(li);
       }
 
       modal.style.display = "flex";
     }
 
+    // 🔹 Cerrar modal al hacer clic fuera
     function closeModal(event) {
       const modal = document.getElementById("dayModal");
       const modalContent = document.getElementById("modalContent");
       if (!modalContent.contains(event.target)) modal.style.display = "none";
     }
 
-    renderTable();
+    loadRoutine();
   </script>
 </body>
 </html>
