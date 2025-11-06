@@ -1,8 +1,10 @@
 let dataSemanal = {};
 let dataDiario = {};
-const emojis = ["😃", "😐", "😴"]; // Estados de cumplimiento
 
-// Cargar rutina (por defecto SEMANAL)
+// Nuevos emojis de cumplimiento
+const emojis = ["😃", "😐", "😴", "💪", "🌟", "🏅"];
+
+// 🧩 Cargar rutina (por defecto SEMANAL)
 async function loadRoutine(type = "SEMANAL") {
   const file = type === "SEMANAL" ? "SEMANAL.json" : "DIARIO.json";
   try {
@@ -15,11 +17,11 @@ async function loadRoutine(type = "SEMANAL") {
     }
     renderTable(data, type);
   } catch (error) {
-    console.error("Error al cargar JSON:", error);
+    console.error("⚠️ Error al cargar JSON:", error);
   }
 }
 
-// Renderizar tabla
+// 🧱 Renderizar tabla principal
 function renderTable(data, type) {
   const container = document.getElementById("routine-table");
   let html = '<table><thead><tr><th>📅 Día</th>';
@@ -32,9 +34,17 @@ function renderTable(data, type) {
 
   for (const dia of dias) {
     html += `<tr><td style="font-weight:bold;">${dia}</td>`;
+
     for (const hora of horas) {
-      html += `<td contenteditable="true" oninput="actualizarTarea('${dia}','${hora}',this.innerText,'${type}')">${data[dia][hora]}</td>`;
+      // 🧠 Validar tipo de dato: texto u objeto
+      const valor = typeof data[dia][hora] === "object"
+        ? (data[dia][hora].actividad || "")
+        : (data[dia][hora] || "");
+
+      html += `<td contenteditable="true" oninput="actualizarTarea('${dia}','${hora}',this.innerText,'${type}')">${valor}</td>`;
     }
+
+    // Emoji actual o predeterminado
     const emoji = data[dia].emoji || "😃";
     html += `<td class="emoji" onclick="toggleEmoji('${dia}','${type}',this)">${emoji}</td>`;
     html += '</tr>';
@@ -44,7 +54,7 @@ function renderTable(data, type) {
   container.innerHTML = html;
 }
 
-// Cambiar el emoji de cumplimiento
+// 🎭 Cambiar emoji de cumplimiento
 function toggleEmoji(dia, type, element) {
   const dataset = type === "SEMANAL" ? dataSemanal : dataDiario;
   const currentEmoji = dataset[dia].emoji || "😃";
@@ -54,19 +64,19 @@ function toggleEmoji(dia, type, element) {
   guardarDatos(type, dataset);
 }
 
-// Guardar tareas al editar
+// ✏️ Guardar tareas al editar
 function actualizarTarea(dia, hora, valor, type) {
   const dataset = type === "SEMANAL" ? dataSemanal : dataDiario;
   dataset[dia][hora] = valor;
   guardarDatos(type, dataset);
 }
 
-// Guardar datos en localStorage
+// 💾 Guardar datos en localStorage
 function guardarDatos(type, data) {
   localStorage.setItem(type, JSON.stringify(data));
 }
 
-// Al cargar la página
+// 🚀 Cargar automáticamente al abrir
 window.onload = async () => {
   const semanalGuardado = localStorage.getItem("SEMANAL");
   const diarioGuardado = localStorage.getItem("DIARIO");
